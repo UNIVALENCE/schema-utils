@@ -3,22 +3,24 @@ package io.univalence.schemautils
 import org.apache.spark.sql.types.{ArrayType, DataType, NullType, StructType}
 import org.apache.spark.sql.{Column, DataFrame}
 
-case class AtomicFieldPath(names: Vector[String], dataType: DataType) {
-  def add(name: String, dataType: DataType): AtomicFieldPath = AtomicFieldPath(names :+ name, dataType)
-  def add(name: String): AtomicFieldPath                     = add(name, dataType)
-}
+case class AtomicFieldPath(names: Vector[String], dataType: DataType)
 
 object JsonoidToTable {
 
-  def allDirectlyAccessibleFields(structType: StructType, path: Vector[String] = Vector.empty): Seq[AtomicFieldPath] = {
-    for {
-      field <- structType.fields
-      fieldpath <- field.dataType match {
-        case subStruct: StructType => allDirectlyAccessibleFields(subStruct, path :+ field.name)
-        case _: ArrayType          => Nil
-        case dt                    => List(AtomicFieldPath(path :+ field.name, dt))
-      }
-    } yield fieldpath
+  def allDirectlyAccessibleFields(structType: StructType): Seq[AtomicFieldPath] = {
+
+    def innerLoop(structType: StructType, prefix: Vector[String]): Seq[AtomicFieldPath] = {
+      for {
+        field <- structType.fields
+        fieldpath <- field.dataType match {
+          case subStruct: StructType => innerLoop(subStruct, prefix :+ field.name)
+          case _: ArrayType          => Nil
+          case dt                    => List(AtomicFieldPath(prefix :+ field.name, dt))
+        }
+      } yield fieldpath
+    }
+
+    innerLoop(structType, Vector.empty)
   }
 
   def apply(df: DataFrame): DataFrame = {
@@ -28,7 +30,7 @@ object JsonoidToTable {
     import org.apache.spark.sql.functions.expr
 
     val cols: Seq[Column] = for {
-      fieldPath <- allDirectlyAccessibleFields(schema, Vector.empty)
+      fieldPath <- allDirectlyAccessibleFields(schema)
     } yield {
       val fieldref: Column = expr(fieldPath.names.mkString("."))
       val name: String     = fieldPath.names.mkString("_")
