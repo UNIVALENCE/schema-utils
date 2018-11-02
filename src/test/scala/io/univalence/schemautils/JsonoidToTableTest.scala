@@ -1,13 +1,16 @@
 package io.univalence.schemautils
 
+import org.apache.spark.sql.types._
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.scalatest.FunSuite
+
+import scala.language.dynamics
 
 class JsonoidToTableTest extends FunSuite {
 
   val ss: SparkSession = SparkSession.builder().master("local").getOrCreate()
 
-  test("basic") {
+  ignore("story") {
 
     val documentA = """
                     {
@@ -52,7 +55,7 @@ class JsonoidToTableTest extends FunSuite {
     +-----------+---+------------+-----------+
      */
 
-    //in.write.csv("out.csv")
+    //in.write.csv("target/data/out.csv")
     /*
     CSV data source does not support struct<b:bigint,c:bigint,d:struct<e:bigint>> data type.
     java.lang.UnsupportedOperationException: CSV data source does not support struct<b:bigint,c:bigint,d:struct<e:bigint>> data type.
@@ -70,6 +73,42 @@ class JsonoidToTableTest extends FunSuite {
     |1  |2  |3    |4  |
     +---+---+-----+---+
    */
-
   }
+
+  test("in and out") {
+    val documentA = """
+                    {
+                      "a":{
+                        "b":1,
+                        "c":2,
+                        "d":{
+                          "e":3
+                        }
+                      },
+                      "f":4,
+                      "g": [5,6,7,8],
+                      "h": [{"i":9},{"i":10}]
+                    }
+                    """
+    import ss.implicits._
+    val in: DataFrame = ss.read.json(ss.createDataset(Seq(documentA)))
+
+    println(in.schema.prettyJson)
+    assert(JsonoidToTable(in).toJSON.head() == """{"a_b":1,"a_c":2,"a_d_e":3,"f":4}""")
+  }
+
+  test("allDirectlyAccessible") {
+    val schema = struct(a = struct(b = LongType, d = struct(e = LongType)), h = array(struct(i = LongType)))
+
+    assert(JsonoidToTable.allDirectlyAccessibleFields(schema) == Seq(AtomicFieldPath(Vector("a", "b"),LongType), AtomicFieldPath(Vector("a", "d", "e"),LongType)))
+  }
+
+
+  object struct extends Dynamic {
+    def applyDynamicNamed(xxx:String)(field:(String,DataType)*):StructType = StructType(field.map({case (name,t) => StructField(name,t)}))
+  }
+
+  def array(dataType: DataType):ArrayType = ArrayType(dataType)
+
+
 }
