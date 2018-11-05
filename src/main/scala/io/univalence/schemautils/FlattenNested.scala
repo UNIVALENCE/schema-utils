@@ -1,17 +1,17 @@
 package io.univalence.schemautils
-import io.univalence.schemautils.SchemaWalk.{FieldPath, fold}
-import org.apache.spark.sql.{Column, DataFrame}
+
+import io.univalence.schemautils.SchemaWalk.fold
 import org.apache.spark.sql.types.{DataType, StructField, StructType}
+import org.apache.spark.sql.{Column, DataFrame}
 
 object FlattenNested {
 
-  def contract(structType: StructType): StructType = {
+  def contract(structType: StructType): StructType =
     SchemaWalk
       .fold[DataType](array  = element => element,
                       struct = seq     => StructType(seq.map({ case (name, dt) => StructField(name, dt) })),
                       atomic = atomic  => atomic)(structType)
       .asInstanceOf[StructType]
-  }
 
   def apply(dataFrame: DataFrame): DataFrame = {
     val genSym: () => String = {
@@ -29,84 +29,83 @@ object FlattenNested {
     case class Array(sym: String, element: Field)                extends Field
     case class Struct(sym: String, fields: Seq[(String, Field)]) extends Field
 
-    def field(dataType: DataType): Field = {
+    def field(dataType: DataType): Field =
       fold[Field](
         e      => Array(genSym(), e),
         fields => Struct(genSym(), fields),
         _      => Atomic(genSym())
       )(dataType)
-    }
 
-    val schemaWithSym:Struct = field(dataFrame.schema).asInstanceOf[Struct]
+    val schemaWithSym: Struct = field(dataFrame.schema).asInstanceOf[Struct]
 
-    def pathToCol(path:Vector[String]):Column = org.apache.spark.sql.functions.expr(path.mkString("."))
+    def pathToCol(path: Vector[String]): Column = org.apache.spark.sql.functions.expr(path.mkString("."))
 
     sealed trait SelectOrExplode
-    case class Select(path:Vector[String],sym:String) extends SelectOrExplode
-    case class Explode(path:Vector[String],sym:String,element:Field) extends SelectOrExplode
+    case class Select(path: Vector[String], sym: String)                  extends SelectOrExplode
+    case class Explode(path: Vector[String], sym: String, element: Field) extends SelectOrExplode
 
-
-    def selectOrExplode(field: Field, prefix:Vector[String] = Vector.empty):Seq[SelectOrExplode] = {
+    def selectOrExplode(field: Field, prefix: Vector[String] = Vector.empty): Seq[SelectOrExplode] = {
       field match {
-        case Atomic(sym) => Seq(Select(prefix,sym))
-        case Struct(_, fields) => fields.flatMap({case (n,f) => selectOrExplode(f,prefix :+ n)})
-        case x @ Array(sym, element) => Seq(Explode(prefix,sym,element))
+        case Atomic(sym)             => Seq(Select(prefix, sym))
+        case Struct(_, fields)       => fields.flatMap({ case (n, f) => selectOrExplode(f, prefix :+ n) })
+        case x @ Array(sym, element) => Seq(Explode(prefix, sym, element))
       }
     }
 
-
-    def unrold(dataFrame: DataFrame, field: Option[Field],atomicSym:Seq[String], keep:Seq[Explode]):DataFrame = {
+    def unrold(dataFrame: DataFrame, field: Option[Field], atomicSym: Seq[String], keep: Seq[Explode]): DataFrame =
       field match {
         case Some(x) =>
-          val in = selectOrExplode(x)
-          val newAtomicSym = in.collect({case Select(path, sym) => sym })
-          val keep: Seq[Explode] = in.collect({case x:Explode => x })
+          val in                 = selectOrExplode(x)
+          val newAtomicSym       = in.collect({ case Select(path, sym) => sym })
+          val keep: Seq[Explode] = in.collect({ case x: Explode => x })
 
           val cols: Seq[Column] = in.map({
-            case Select(path, sym) => pathToCol(path).as(sym)
+            case Select(path, sym)           => pathToCol(path).as(sym)
             case Explode(path, sym, element) => org.apache.spark.sql.functions.explode_outer(pathToCol(path)).as(sym)
           })
 
           val newDf = dataFrame.select(cols: _*)
 
-          if(keep.isEmpty) {
+          if (keep.isEmpty) {
             newDf
           } else {
-            unrold(newDf,None,newAtomicSym,keep)
+            unrold(newDf, None, newAtomicSym, keep)
           }
 
         case None =>
-          val in = keep.flatMap({case Explode(path, sym, element) => selectOrExplode(element,Vector(sym))})
-          val newAtomicSym = in.collect({case Select(path, sym) => sym})
+          val in           = keep.flatMap({ case Explode(path, sym, element) => selectOrExplode(element, Vector(sym)) })
+          val newAtomicSym = in.collect({ case Select(path, sym)             => sym })
 
-          val newKeep: Seq[Explode] = in.collect({case x:Explode => x})
+          val newKeep: Seq[Explode] = in.collect({ case x: Explode => x })
           val cols: Seq[Column] = in.map({
-            case Select(path, sym) => pathToCol(path).as(sym)
+            case Select(path, sym)           => pathToCol(path).as(sym)
             case Explode(path, sym, element) => org.apache.spark.sql.functions.explode_outer(pathToCol(path)).as(sym)
           })
-          val newDf = dataFrame.select(cols ++ atomicSym.map(dataFrame.col) :_*)
+          val newDf = dataFrame.select(cols ++ atomicSym.map(dataFrame.col): _*)
 
-          if(newKeep.isEmpty) {
+          if (newKeep.isEmpty) {
             newDf
           } else {
-            unrold(newDf,None,atomicSym ++ newAtomicSym,newKeep)
+            unrold(newDf, None, atomicSym ++ newAtomicSym, newKeep)
           }
       }
-    }
 
-    val flatten = unrold(dataFrame, Some(schemaWithSym),Nil,Nil)
+    val flatten = unrold(dataFrame, Some(schemaWithSym), Nil, Nil)
 
-    def fieldToCol(field: Field):String = {
+    def fieldToCol(field: Field): String =
       field match {
         case Atomic(sym) => sym
-        case Struct(sym, fields) => fields.map({case (n,f) => fieldToCol(f) + " as " + n}).mkString("struct(",",",")")
+        case Struct(sym, fields) =>
+          fields.map({ case (n, f) => fieldToCol(f) + " as " + n }).mkString("struct(", ",", ")")
         case Array(sym, element) => fieldToCol(element)
       }
-    }
 
-    val res = flatten.select(schemaWithSym.fields.map({case (n,f) => org.apache.spark.sql.functions.expr(fieldToCol(f) + " as "  + n)}):_*)
+    val res =
+      flatten.select(schemaWithSym.fields.map({
+        case (n, f) => org.apache.spark.sql.functions.expr(fieldToCol(f) + " as " + n)
+      }): _*)
 
-    SchemaWalk.validateSchema(res,contract(dataFrame.schema)).get
+    SchemaWalk.validateSchema(res, contract(dataFrame.schema)).get
   }
 
 }

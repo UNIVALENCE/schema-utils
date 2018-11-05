@@ -7,10 +7,8 @@ import org.scalatest.FunSuite
 import scala.language.dynamics
 
 object TestSparkSession {
-
   val ss: SparkSession = SparkSession.builder().master("local").getOrCreate()
 }
-
 
 class JsonoidToTableTest extends FunSuite {
 
