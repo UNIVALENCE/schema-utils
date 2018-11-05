@@ -104,7 +104,9 @@ object FlattenNested {
       }
     }
 
-    flatten.select(schemaWithSym.fields.map({case (n,f) => org.apache.spark.sql.functions.expr(fieldToCol(f) + " as "  + n)}):_*)
+    val res = flatten.select(schemaWithSym.fields.map({case (n,f) => org.apache.spark.sql.functions.expr(fieldToCol(f) + " as "  + n)}):_*)
+
+    SchemaWalk.validateSchema(res,contract(dataFrame.schema)).get
   }
 
 }
