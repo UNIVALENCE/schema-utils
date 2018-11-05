@@ -1,7 +1,7 @@
 package io.univalence.schemautils
 import org.apache.spark.sql.types.{ArrayType, DataType, StructType}
 
-class SchemaWalk {
+object SchemaWalk {
 
   def fold[B](array: B => B, struct: Seq[(String, B)] => B, atomic: DataType => B)(dataType: DataType): B = {
     val recur: DataType => B = fold(array, struct, atomic)
