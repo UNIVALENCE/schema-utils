@@ -25,17 +25,14 @@ object SchemaWalk {
                            } yield name :: fieldPath,
                          atomic = _ => Vector(Nil))(dataType)
 
-  def sameDatatype(d1: DataType, d2: DataType): Boolean =
+  def sameDatatype(d1: DataType, d2: DataType): Boolean = {
     (d1, d2) match {
-      case (ArrayType(e1, _), ArrayType(e2, _)) =>
-        sameDatatype(e1, e2)
-
+      case (ArrayType(e1, _), ArrayType(e2, _)) => sameDatatype(e1, e2)
       case (StructType(f1), StructType(f2)) =>
         f1.zip(f2).forall({ case (sf1, sf2) => sf1.name == sf2.name && sameDatatype(sf1.dataType, sf2.dataType) })
-
-      case (x, y) =>
-        x == y
+      case (x, y) => x == y
     }
+  }
 
   def validateSchema(dataframe: DataFrame, contract: StructType): Option[DataFrame] =
     if (sameDatatype(dataframe.schema, contract)) Option(dataframe)
