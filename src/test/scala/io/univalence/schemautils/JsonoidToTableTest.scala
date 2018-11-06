@@ -105,6 +105,4 @@ class JsonoidToTableTest extends FunSuite {
                                                                 AtomicFieldPath(Vector("a", "d", "e"), LongType)))
   }
 
-
-
 }

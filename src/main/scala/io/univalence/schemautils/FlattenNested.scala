@@ -53,30 +53,36 @@ object FlattenNested {
       }
     }
 
-    def unrold(dataFrame: DataFrame, field: Option[Field], atomicSym: Seq[String], keep: Seq[Explode]): DataFrame = {
-      val in: Seq[SelectOrExplode] = keep.flatMap({
+    def unrold(dataFrame: DataFrame,
+               field: Option[Field],
+               atomicSym: Seq[String],
+               exploded: Option[Explode],
+               notYetExploded: List[Explode]): DataFrame = {
+      val in: Seq[SelectOrExplode] = exploded.toList.flatMap({
         case Explode(path, sym, element) => selectOrExplode(element, Vector(sym))
       }) ++ field.map(x => selectOrExplode(x)).getOrElse(Nil)
 
-      val newAtomicSym: Seq[String] = in.collect({ case Select(path, sym) => sym })
-      val newKeep: Seq[Explode]     = in.collect({ case x: Explode        => x })
+      val toSelect: Seq[Select]    = in.collect({ case x: Select => x })
+      val toExplode: List[Explode] = notYetExploded ++ in.collect({ case x: Explode => x }).toList
 
-      val cols: Seq[Column] = in.map({
-        case Select(path, sym)           => pathToCol(path).as(sym)
-        case Explode(path, sym, element) => org.apache.spark.sql.functions.explode_outer(pathToCol(path)).as(sym)
-      })
+      val toSelectCols = toSelect.map({ case Select(path, sym) => pathToCol(path).as(sym) })
+      val atomicCols   = atomicSym.map(dataFrame.col)
 
-      val newDf = dataFrame.select(cols ++ atomicSym.map(dataFrame.col): _*)
+      toExplode match {
+        case Nil => dataFrame.select(toSelectCols ++ atomicCols: _*)
+        case x :: xs =>
+          val gen = org.apache.spark.sql.functions.explode_outer(pathToCol(x.path)).as(x.sym)
 
-      if (newKeep.isEmpty) {
-        newDf
-      } else {
-        unrold(newDf, None, newAtomicSym ++ atomicSym, newKeep)
+          val explosion = gen :: xs.map(x => pathToCol(x.path).as(x.sym))
+
+          val newDf = dataFrame.select(toSelectCols ++ atomicCols ++ explosion: _*)
+
+          unrold(newDf, None, atomicSym ++ toSelect.map(_.sym), Option(x), xs.map(x => x.copy(path = Vector(x.sym))))
       }
 
     }
 
-    val flatten = unrold(dataFrame, Some(schemaWithSym), Nil, Nil)
+    val flatten = unrold(dataFrame, Some(schemaWithSym), Nil, None, Nil)
 
     def fieldToCol(field: Field): String = {
       field match {
