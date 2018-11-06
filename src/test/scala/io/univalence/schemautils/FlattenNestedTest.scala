@@ -42,11 +42,19 @@ class FlattenNestedTest extends FunSuite {
   }
 
   test("double array") {
-    val document: String = """{"a":[1],"b":[2,3]}"""
+    val document: String = """{"a":[1,2],"b":[3,4]}"""
 
     import ss.implicits._
     val in0: DataFrame = ss.read.json(ss.createDataset(Seq(document)))
 
+    val df = FlattenNested(in0)
+
+    val doc1 = """{"a":1,"b":3}"""
+    val doc2 = """{"a":1,"b":4}"""
+    val doc3 = """{"a":2,"b":3}"""
+    val doc4 = """{"a":2,"b":4}"""
+
+    assert(df.toJSON.collect() sameElements Array(doc1, doc2, doc3, doc4))
   }
 
 }

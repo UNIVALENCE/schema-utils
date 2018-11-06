@@ -1,7 +1,7 @@
 package io.univalence.schemautils
 
 import io.univalence.schemautils.SchemaWalk.fold
-import org.apache.spark.sql.types.{DataType, StructField, StructType}
+import org.apache.spark.sql.types.{DataType, StringType, StructField, StructType}
 import org.apache.spark.sql.{Column, DataFrame}
 
 object FlattenNested {
@@ -93,5 +93,4 @@ object FlattenNested {
 
     SchemaWalk.validateSchema(res, contract(dataFrame.schema)).get
   }
-
 }
