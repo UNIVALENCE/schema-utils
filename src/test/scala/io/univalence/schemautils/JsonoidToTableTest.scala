@@ -97,6 +97,7 @@ class JsonoidToTableTest extends FunSuite {
   }
 
   test("allDirectlyAccessible") {
+    import SchemaDsl._
     val schema = struct(a = struct(b = LongType, d = struct(e = LongType)), h = array(struct(i = LongType)))
 
     assert(
@@ -104,11 +105,6 @@ class JsonoidToTableTest extends FunSuite {
                                                                 AtomicFieldPath(Vector("a", "d", "e"), LongType)))
   }
 
-  object struct extends Dynamic {
-    def applyDynamicNamed(xxx: String)(field: (String, DataType)*): StructType =
-      StructType(field.map({ case (name, t) => StructField(name, t) }))
-  }
 
-  def array(dataType: DataType): ArrayType = ArrayType(dataType)
 
 }
