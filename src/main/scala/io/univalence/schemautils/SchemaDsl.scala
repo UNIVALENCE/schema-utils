@@ -17,5 +17,3 @@ object SchemaDsl {
   def array(dataType: DataType) = ArrayType(dataType)
 
 }
-
-

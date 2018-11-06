@@ -19,7 +19,7 @@ class FlattenNestedTest extends FunSuite {
                     }"""
 
     import ss.implicits._
-    val in0: DataFrame = ss.read.json(ss.createDataset(Seq(documentA)))
+    val in0: DataFrame = TestSparkSession.dfFromJson(documentA)
 
     import org.apache.spark.sql.functions.expr
 
@@ -44,8 +44,7 @@ class FlattenNestedTest extends FunSuite {
   test("double array") {
     val document: String = """{"a":[1,2],"b":[3,4]}"""
 
-    import ss.implicits._
-    val in0: DataFrame = ss.read.json(ss.createDataset(Seq(document)))
+    val in0: DataFrame = TestSparkSession.dfFromJson(document)
 
     val df = FlattenNested(in0)
 

@@ -27,8 +27,7 @@ class JsonoidToTableTest extends FunSuite {
                     }
                     """
 
-    import ss.implicits._
-    val in: DataFrame = ss.read.json(ss.createDataset(Seq(documentA)))
+    val in: DataFrame = TestSparkSession.dfFromJson(documentA)
 
     in.printSchema()
     /*
@@ -91,9 +90,9 @@ class JsonoidToTableTest extends FunSuite {
                     }
                     """
     import ss.implicits._
-    val in: DataFrame = ss.read.json(ss.createDataset(Seq(documentA)))
+    val in: DataFrame = TestSparkSession.dfFromJson(documentA)
 
-    println(in.schema.prettyJson)
+    //println(in.schema.prettyJson)
     assert(JsonoidToTable(in).toJSON.head() == """{"a_b":1,"a_c":2,"a_d_e":3,"f":4}""")
   }
 

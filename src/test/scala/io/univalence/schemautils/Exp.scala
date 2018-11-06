@@ -7,8 +7,7 @@ object Exp {
 
   val schema: StructType = struct(firstname = string,
                                   lastname = string,
-                                  contact  = struct(`type` = string,
-                                                    value = struct(dept = string, id = string)))
+                                  contact  = struct(`type` = string, value = struct(dept = string, id = string)))
 
   def main(args: Array[String]): Unit = {
 
