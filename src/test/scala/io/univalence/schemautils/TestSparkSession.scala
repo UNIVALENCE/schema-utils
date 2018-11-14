@@ -18,6 +18,6 @@ object TestSparkSession {
 
   def dfFromJson(jsonStr: String*): DataFrame = {
     import ss.implicits._
-    ss.read.json(smallDs(jsonStr: _*))
+    ss.read.option("allowUnquotedFieldNames", true).json(smallDs(jsonStr: _*))
   }
 }
