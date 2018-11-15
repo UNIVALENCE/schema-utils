@@ -65,7 +65,78 @@ class FlattenNestedTargetedTest extends FunSuite {
 
   }
 
-  test("detach") {
+  test("detach outer") {
+
+    val in = dfFromJson("""
+             { idvisitor: 1,
+               xxx: {visites:  [
+               {idvisite : 2, recherches: [{idrecherche:3}, {idrecherche:4}] },
+               {idvisite: 3},
+               {idvisite: 5, recherches: [{idrecherche:6}]}
+               ]}
+             }""")
+
+    val out = dfFromJson("""
+      {
+         idvisitor:1,
+         xxx: {visites:[
+            {idvisite:2},
+            {idvisite:3},
+            {idvisite:5}],
+         recherches:[{visite_idvisite:2,idrecherche:3},
+                     {visite_idvisite:2,idrecherche:4},
+                     {visite_idvisite:3},
+                     {visite_idvisite:5,idrecherche:6}]
+      }}
+    """)
+
+
+    assertDfEqual(
+      FlattenNestedTargeted.detach(
+        in,
+        target      = Path.fromString("xxx.visites.[].recherches"),
+        fieldname   = _.mkString("_"),
+        includeRoot = x => Some(("visite" +: x).mkString("_")),
+        addLink     = false,
+        outer       = true
+      ),
+      out
+    )
+
+
+  }
+
+  test("detach deep") {
+    val in = dfFromJson(
+      """
+         { idvisitor: 1,
+           visites : [
+             {idvisite: 2,
+              recherches: [
+                {idrecherche:3, history: [{idrq:4}]}
+             ]}
+           ]
+           }
+      """)
+
+    val out = dfFromJson("""{"idvisitor":1,"visites":[{"idvisite":2,"recherches":[{"idrecherche":3}],"history":[{"recherche_idrecherche":3,"idrq":4}]}]}""")
+
+
+    val res = FlattenNestedTargeted.detach(
+      in,
+      target      = Path.fromString("visites.[].recherches.[].history"),
+      fieldname   = _.mkString("_"),
+      includeRoot = x => Some(("recherche" +: x).mkString("_")),
+      addLink     = false,
+      outer       = false
+    )
+
+    assertDfEqual(res,out)
+
+
+  }
+
+  test("detach 1") {
 
     val in = dfFromJson("""
              { idvisitor: 1,

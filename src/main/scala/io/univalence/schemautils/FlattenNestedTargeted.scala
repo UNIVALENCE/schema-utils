@@ -151,10 +151,32 @@ object FlattenNestedTargeted {
 
         val in = rest.mkString(".")
 
-        val txs = s"""flatten(
+
+        val empty_ys = y.fields.map(f => s"cast(null as ${f.dataType.catalogString}) as ${f.name}").mkString(", ")
+
+
+        val outer_array = s"array(struct($xs, $empty_ys))"
+
+
+        val transform_x = s"""transform(x.$in, y -> struct($xs, $ys))"""
+
+
+        val txs = if(outer)
+         s"""flatten(transform($s.$init,
+            x -> if(cardinality(x.$in) >= 0,
+            $transform_x,
+            $outer_array
+            )
+
+
+            )) as $name
+          """
+        else {
+          s"""flatten(
            transform(filter($s.$init, x -> cardinality(x.$in) >= 0),
-             x -> transform(x.$in,
-               y -> struct($xs, $ys)))) as $name"""
+             x -> $transform_x )) as $name"""
+
+        }
 
         val zs   = (root :+ txs).mkString(",")
         val res2 = s"""struct($zs)"""
