@@ -72,24 +72,45 @@ class FlattenNestedTargetedTest extends FunSuite {
                xxx: {visites:  [
                  {idvisite : 2, recherches: [{idrecherche:3}, {idrecherche:4}] },
                  {idvisite: 3},
-                 {idvisite: 5, recherches: [{idrecherche:6}]}
+                 {idvisite: 5, recherches: [{idrecherche:6}]},
+                 {idvisite: 7, recherches: []}
                ] }
              }""")
 
 
-    val out = dfFromJson("""
+    val out1 = dfFromJson("""
       {
          idvisitor:1,
          xxx: {visites:[
             {idvisite:2, recherches_link: [1,2]},
             {idvisite:3},
-            {idvisite:5, recherches_link: [4]}],
+            {idvisite:5, recherches_link: [4]},
+            {idvisite:7, recherches_link: []}
+            ],
          recherches:[{visite_idvisite:2,idrecherche:3},
                      {visite_idvisite:2,idrecherche:4},
                      {visite_idvisite:3},
-                     {visite_idvisite:5,idrecherche:6}]
+                     {visite_idvisite:5,idrecherche:6},
+                     {visite_idvisite:7}]
       }}
     """)
+
+    val out2 = dfFromJson("""
+      {
+         idvisitor:1,
+         xxx: {visites:[
+            {idvisite:2, recherches_link: [1,2]},
+            {idvisite:3},
+            {idvisite:5, recherches_link: [3]},
+            {idvisite:7, recherches_link: []}
+            ],
+         recherches:[{visite_idvisite:2,idrecherche:3},
+                     {visite_idvisite:2,idrecherche:4},
+                     {visite_idvisite:5,idrecherche:6}
+                     ]
+      }}
+    """)
+
 
 
     assertDfEqual(
@@ -101,8 +122,22 @@ class FlattenNestedTargetedTest extends FunSuite {
         addLink     = true,
         outer       = true
       ),
-      out
+      out1
     )
+
+    assertDfEqual(
+      FlattenNestedTargeted.detach(
+        in,
+        target      = Path.fromString("xxx.visites.[].recherches"),
+        fieldname   = _.mkString("_"),
+        includeRoot = x => Some(("visite" +: x).mkString("_")),
+        addLink     = true,
+        outer       = false
+      ),
+      out2
+    )
+
+
 
   }
 

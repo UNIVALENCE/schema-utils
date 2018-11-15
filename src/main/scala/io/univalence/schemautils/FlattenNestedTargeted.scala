@@ -8,13 +8,16 @@ import scala.util.{Random, Try}
 object FlattenNestedTargeted {
 
 
-  def offset(seq:Seq[Int]):Seq[Seq[Int]] = {
+  def offset(seq:Seq[Int]):Seq[Option[Seq[Int]]] = {
     var offset = 1
     seq.map(x => {
       val start = offset
       val size = Math.max(x,0)
       offset = offset + size
       start.until(start + size)
+
+      val y:Option[Seq[Int]] = if(x == -1) None else Some(start.until(start + size))
+      y
     })
   }
 
@@ -25,7 +28,7 @@ object FlattenNestedTargeted {
       val size = Math.max(x,1)
       offset = offset + size
 
-      val y:Option[Seq[Int]] = if(x > 0) Some(start.until(start + size)) else if (x ==0) Some(Nil) else None
+      val y:Option[Seq[Int]] = if(x == -1) None else if(x == 0) Some(Nil) else Some(start.until(start + size))
       y
     })
   }
@@ -139,6 +142,8 @@ object FlattenNestedTargeted {
 
 
     dataFrame.sparkSession.udf.register("offset_outer",offset_outer _)
+    dataFrame.sparkSession.udf.register("offset",offset _)
+
 
     val (scope, follow) = target.splitAt(target.lastIndexOf(PathPart.Array) - 1)
 
@@ -176,10 +181,13 @@ object FlattenNestedTargeted {
                 case `init` =>
 
                   if(addLink) {
-                    val size_array = s"""offset_outer(transform($s.$init, x -> cardinality(x.$in)))"""
+                    val size_array: String = if(outer)
+                      s"""offset_outer(transform($s.$init, x -> cardinality(x.$in)))"""
+                    else
+                      s"""offset(transform($s.$init, x -> cardinality(x.$in)))"""
 
-                      s"zip_with($size_array,$s.$init, (n,x) -> struct($root_xs, n as ${name}_link )) as $init"
 
+                    s"zip_with($size_array,$s.$init, (n,x) -> struct($root_xs, n as ${name}_link )) as $init"
                   } else
                   s"""transform($s.$init, x -> struct($root_xs)) as $init"""
                 case n => s"$s.$n as $n"
@@ -200,7 +208,7 @@ object FlattenNestedTargeted {
 
         val txs = if(outer)
          s"""flatten(transform($s.$init,
-            x -> if(cardinality(x.$in) >= 0,
+            x -> if(cardinality(x.$in) > 0,
             $transform_x,
             $outer_array
             )
