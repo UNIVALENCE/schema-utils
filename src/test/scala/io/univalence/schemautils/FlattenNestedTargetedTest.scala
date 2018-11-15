@@ -65,15 +65,56 @@ class FlattenNestedTargetedTest extends FunSuite {
 
   }
 
+  test("add_link") {
+
+    val in = dfFromJson("""
+             { idvisitor: 1,
+               xxx: {visites:  [
+                 {idvisite : 2, recherches: [{idrecherche:3}, {idrecherche:4}] },
+                 {idvisite: 3},
+                 {idvisite: 5, recherches: [{idrecherche:6}]}
+               ] }
+             }""")
+
+
+    val out = dfFromJson("""
+      {
+         idvisitor:1,
+         xxx: {visites:[
+            {idvisite:2, recherches_link: [1,2]},
+            {idvisite:3},
+            {idvisite:5, recherches_link: [4]}],
+         recherches:[{visite_idvisite:2,idrecherche:3},
+                     {visite_idvisite:2,idrecherche:4},
+                     {visite_idvisite:3},
+                     {visite_idvisite:5,idrecherche:6}]
+      }}
+    """)
+
+
+    assertDfEqual(
+      FlattenNestedTargeted.detach(
+        in,
+        target      = Path.fromString("xxx.visites.[].recherches"),
+        fieldname   = _.mkString("_"),
+        includeRoot = x => Some(("visite" +: x).mkString("_")),
+        addLink     = true,
+        outer       = true
+      ),
+      out
+    )
+
+  }
+
   test("detach outer") {
 
     val in = dfFromJson("""
              { idvisitor: 1,
                xxx: {visites:  [
-               {idvisite : 2, recherches: [{idrecherche:3}, {idrecherche:4}] },
-               {idvisite: 3},
-               {idvisite: 5, recherches: [{idrecherche:6}]}
-               ]}
+                 {idvisite : 2, recherches: [{idrecherche:3}, {idrecherche:4}] },
+                 {idvisite: 3},
+                 {idvisite: 5, recherches: [{idrecherche:6}]}
+               ] }
              }""")
 
     val out = dfFromJson("""
@@ -263,7 +304,7 @@ class FlattenNestedTargetedTest extends FunSuite {
            zip_with(
             aggregate(visites,
             named_struct('a',cast(array() as array<int>),'b',0),
-            (acc, visite) -> named_struct('a',array_union(acc.a, array(acc.b)), 'b', acc.b +   array_max(array(cardinality(visite.recherches),1))) , x -> x.a),
+            (acc, visite) -> named_struct('a',array_union(acc.a, array(acc.b)), 'b', acc.b + array_max(array(cardinality(visite.recherches),1))) , x -> x.a),
             visites,
             (n,visite) -> named_struct('idvisite', visite.idvisite,  'recherches_link',
 

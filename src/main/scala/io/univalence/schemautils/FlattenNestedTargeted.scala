@@ -7,6 +7,31 @@ import scala.util.{Random, Try}
 
 object FlattenNestedTargeted {
 
+
+  def offset(seq:Seq[Int]):Seq[Seq[Int]] = {
+    var offset = 1
+    seq.map(x => {
+      val start = offset
+      val size = Math.max(x,0)
+      offset = offset + size
+      start.until(start + size)
+    })
+  }
+
+  def offset_outer(seq:Seq[Int]):Seq[Option[Seq[Int]]] = {
+    var offset = 1
+    seq.map(x => {
+      val start = offset
+      val size = Math.max(x,1)
+      offset = offset + size
+
+      val y:Option[Seq[Int]] = if(x > 0) Some(start.until(start + size)) else if (x ==0) Some(Nil) else None
+      y
+    })
+  }
+
+
+
   case class Tablename(name: String) extends AnyVal
 
   def sql(input: DataFrame)(query: Tablename => String): DataFrame = {
@@ -112,6 +137,9 @@ object FlattenNestedTargeted {
              addLink: Boolean = true,
              outer: Boolean   = true): DataFrame = {
 
+
+    dataFrame.sparkSession.udf.register("offset_outer",offset_outer _)
+
     val (scope, follow) = target.splitAt(target.lastIndexOf(PathPart.Array) - 1)
 
     val Seq(PathPart.Field(init), PathPart.Array, rest @ _*) = follow
@@ -129,7 +157,7 @@ object FlattenNestedTargeted {
 
         val xs = all.flatMap(name => includeRoot(name :: Nil).map(n => s"x.$name as $n")).mkString(",")
 
-        val name = fieldname(rest.map({ case PathPart.Field(n) => n }))
+        val name: String = fieldname(rest.map({ case PathPart.Field(n) => n }))
 
         val y = dataTypeAtPath(rest, x).get.asInstanceOf[ArrayType].elementType.asInstanceOf[StructType]
 
@@ -137,19 +165,28 @@ object FlattenNestedTargeted {
 
         val root_xs = all.map(name => s"x.$name as $name").mkString(", ")
 
-        val root = dt
-          .asInstanceOf[StructType]
-          .fieldNames
-          .map({
-            case `init` =>
-              s"""
-             transform($s.$init, x -> struct($root_xs)) as $init
-          """
-
-            case n => s"$s.$n as $n"
-          })
 
         val in = rest.mkString(".")
+
+        val root: Array[String] =
+            dt
+              .asInstanceOf[StructType]
+              .fieldNames
+              .map({
+                case `init` =>
+
+                  if(addLink) {
+                    val size_array = s"""offset_outer(transform($s.$init, x -> cardinality(x.$in)))"""
+
+                      s"zip_with($size_array,$s.$init, (n,x) -> struct($root_xs, n as ${name}_link )) as $init"
+
+                  } else
+                  s"""transform($s.$init, x -> struct($root_xs)) as $init"""
+                case n => s"$s.$n as $n"
+              })
+
+
+
 
 
         val empty_ys = y.fields.map(f => s"cast(null as ${f.dataType.catalogString}) as ${f.name}").mkString(", ")
