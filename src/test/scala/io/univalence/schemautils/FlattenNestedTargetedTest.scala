@@ -1,63 +1,9 @@
 package io.univalence.schemautils
 
 import io.univalence.schemautils.FlattenNestedTargeted.Path
-import org.apache.spark.sql.DataFrame
 import org.scalatest.FunSuiteLike
 
 class FlattenNestedTargetedTest extends FunSuiteLike with TestSparkSession {
-
-  def assertDfEqual(f1: DataFrame, f2: DataFrame): Unit =
-    assert(
-      f1.toJSON.collect().toList
-        == FlattenNestedTargeted.alignDataframe(f2, f1.schema).toJSON.collect().toList)
-
-  test("txPath") {
-    val df = dfFromJson("""
-             { a: 1,
-               b: [{ c: [{ d: 4 },
-                         { d: 5 }],
-                     e: 6 },
-                   { f: 7 }]
-             }""")
-
-    {
-      val res = FlattenNestedTargeted.txPath(Path.fromString("a"), (_, x) => s"$x + 1")(df)
-
-      assertDfEqual(
-        res,
-        dfFromJson("""
-             { a: 2,
-               b: [{ c: [{ d: 4 },
-                         { d: 5 }],
-                     e: 6 },
-                   { f: 7 }]
-             }""")
-      )
-    }
-
-    {
-      val res = FlattenNestedTargeted.txPath(Path.fromString("b.[].e"), (_, x) => s"$x + 1")(df)
-      assertDfEqual(
-        res,
-        dfFromJson("""
-             { a: 1,
-               b: [{ c: [{ d: 4 },
-                         { d: 5 }],
-                     e: 7 },
-                   { f: 7 }]
-             }""")
-      )
-    }
-
-    {
-      val in = dfFromJson("{a:{b:{c:3,d:4}}}")
-
-      assertDfEqual(
-        FlattenNestedTargeted.txPath(Path.fromString("a.b.c"), (_, x) => s"$x + 1")(in),
-        dfFromJson("{a:{b:{c:4,d:4}}}")
-      )
-    }
-  }
 
   test("add_link") {
     val in = dfFromJson("""
@@ -129,7 +75,6 @@ class FlattenNestedTargetedTest extends FunSuiteLike with TestSparkSession {
   }
 
   test("detach outer") {
-
     val in = dfFromJson("""
              { idvisitor: 1,
                xxx: {visites:  [

@@ -120,7 +120,7 @@ object FlattenNestedTargeted {
       case _ => Try(???)
     }
 
-  def txPath(target: Path, tx: (DataType, String) => String)(dataFrame: DataFrame): DataFrame = {
+  def transformAtPath(target: Path, tx: (DataType, String) => String)(dataFrame: DataFrame): DataFrame = {
 
     def rewrite(dataType: DataType, target: Path, top: Boolean = false, expr: String): String =
       (target, dataType) match {
@@ -160,7 +160,7 @@ object FlattenNestedTargeted {
 
     val Seq(PathPart.Field(init), PathPart.Array, rest @ _*) = follow
 
-    txPath(
+    transformAtPath(
       scope,
       (dt, s) => {
 

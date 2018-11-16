@@ -27,6 +27,11 @@ trait TestSparkSession {
       .json(smallDs(jsonStr: _*))
   }
 
+  def assertDfEqual(f1: DataFrame, f2: DataFrame): Unit =
+    assert(
+      f1.toJSON.collect().toList
+        == FlattenNestedTargeted.alignDataframe(f2, f1.schema).toJSON.collect().toList)
+
 }
 
 object TestSparkSession extends TestSparkSession
