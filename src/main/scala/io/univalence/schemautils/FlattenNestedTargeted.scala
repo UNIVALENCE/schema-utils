@@ -1,10 +1,24 @@
 package io.univalence.schemautils
 
-import org.apache.spark.sql.DataFrame
+import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.apache.spark.sql.types.{ArrayType, DataType, StructField, StructType}
 
 import scala.annotation.tailrec
 import scala.util.{Random, Try}
+
+object GenSym {
+
+  val genTempTableName: SparkSession => String = {
+    var x = 0
+
+    def f(ss: SparkSession): String = {
+      x = x + 1
+      val name = "tempTbl" + x
+      if (ss.catalog.tableExists(name)) f(ss) else name
+    }
+    f
+  }
+}
 
 object FlattenNestedTargeted {
 
@@ -138,13 +152,15 @@ object FlattenNestedTargeted {
           else exprs.mkString("struct(", ", ", s")")
       }
 
-    val str = rewrite(dataFrame.schema, target, top = true, "toto")
+    val tempTableName = GenSym.genTempTableName(dataFrame.sparkSession)
+    dataFrame.createTempView(tempTableName)
 
-    dataFrame.createTempView("toto")
+    val projection = rewrite(dataFrame.schema, target, top = true, tempTableName)
+    val out        = dataFrame.sparkSession.sql(s"select $projection from $tempTableName")
 
-    val x = dataFrame.sparkSession.sql(s"select $str from toto")
-    dataFrame.sparkSession.catalog.dropTempView("toto")
-    x
+    dataFrame.sparkSession.catalog.dropTempView(tempTableName)
+
+    out
   }
 
   def detach(dataFrame: DataFrame,
