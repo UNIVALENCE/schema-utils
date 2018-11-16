@@ -1,4 +1,5 @@
 package io.univalence.schemautils
+
 import io.univalence.schemautils.TestSparkSession.ss
 import org.apache.spark.sql.DataFrame
 import org.scalatest.FunSuite

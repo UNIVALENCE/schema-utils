@@ -1,7 +1,7 @@
 package io.univalence.schemautils
 
 import org.apache.spark.sql.types._
-import org.apache.spark.sql.{DataFrame, SparkSession}
+import org.apache.spark.sql.DataFrame
 import org.scalatest.FunSuite
 
 import scala.language.dynamics

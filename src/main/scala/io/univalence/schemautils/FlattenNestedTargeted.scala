@@ -1,4 +1,5 @@
 package io.univalence.schemautils
+
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.types.{ArrayType, DataType, StructField, StructType}
 
@@ -7,33 +8,30 @@ import scala.util.{Random, Try}
 
 object FlattenNestedTargeted {
 
-
-  def offset(seq:Seq[Int]):Seq[Option[Seq[Int]]] = {
+  def offset(seq: Seq[Int]): Seq[Option[Seq[Int]]] = {
     var offset = 1
     seq.map(x => {
       val start = offset
-      val size = Math.max(x,0)
+      val size  = Math.max(x, 0)
       offset = offset + size
       start.until(start + size)
 
-      val y:Option[Seq[Int]] = if(x == -1) None else Some(start.until(start + size))
+      val y: Option[Seq[Int]] = if (x == -1) None else Some(start.until(start + size))
       y
     })
   }
 
-  def offset_outer(seq:Seq[Int]):Seq[Option[Seq[Int]]] = {
+  def offset_outer(seq: Seq[Int]): Seq[Option[Seq[Int]]] = {
     var offset = 1
     seq.map(x => {
       val start = offset
-      val size = Math.max(x,1)
+      val size  = Math.max(x, 1)
       offset = offset + size
 
-      val y:Option[Seq[Int]] = if(x == -1) None else if(x == 0) Some(Nil) else Some(start.until(start + size))
+      val y: Option[Seq[Int]] = if (x == -1) None else if (x == 0) Some(Nil) else Some(start.until(start + size))
       y
     })
   }
-
-
 
   case class Tablename(name: String) extends AnyVal
 
@@ -140,10 +138,8 @@ object FlattenNestedTargeted {
              addLink: Boolean = true,
              outer: Boolean   = true): DataFrame = {
 
-
-    dataFrame.sparkSession.udf.register("offset_outer",offset_outer _)
-    dataFrame.sparkSession.udf.register("offset",offset _)
-
+    dataFrame.sparkSession.udf.register("offset_outer", offset_outer _)
+    dataFrame.sparkSession.udf.register("offset", offset _)
 
     val (scope, follow) = target.splitAt(target.lastIndexOf(PathPart.Array) - 1)
 
@@ -170,44 +166,35 @@ object FlattenNestedTargeted {
 
         val root_xs = all.map(name => s"x.$name as $name").mkString(", ")
 
-
         val in = rest.mkString(".")
 
         val root: Array[String] =
-            dt
-              .asInstanceOf[StructType]
-              .fieldNames
-              .map({
-                case `init` =>
-
-                  if(addLink) {
-                    val size_array: String = if(outer)
+          dt.asInstanceOf[StructType]
+            .fieldNames
+            .map({
+              case `init` =>
+                if (addLink) {
+                  val size_array: String =
+                    if (outer)
                       s"""offset_outer(transform($s.$init, x -> cardinality(x.$in)))"""
                     else
                       s"""offset(transform($s.$init, x -> cardinality(x.$in)))"""
 
-
-                    s"zip_with($size_array,$s.$init, (n,x) -> struct($root_xs, n as ${name}_link )) as $init"
-                  } else
+                  s"zip_with($size_array,$s.$init, (n,x) -> struct($root_xs, n as ${name}_link )) as $init"
+                } else
                   s"""transform($s.$init, x -> struct($root_xs)) as $init"""
-                case n => s"$s.$n as $n"
-              })
-
-
-
-
+              case n => s"$s.$n as $n"
+            })
 
         val empty_ys = y.fields.map(f => s"cast(null as ${f.dataType.catalogString}) as ${f.name}").mkString(", ")
 
-
         val outer_array = s"array(struct($xs, $empty_ys))"
-
 
         val transform_x = s"""transform(x.$in, y -> struct($xs, $ys))"""
 
-
-        val txs = if(outer)
-         s"""flatten(transform($s.$init,
+        val txs =
+          if (outer)
+            s"""flatten(transform($s.$init,
             x -> if(cardinality(x.$in) > 0,
             $transform_x,
             $outer_array
@@ -216,12 +203,12 @@ object FlattenNestedTargeted {
 
             )) as $name
           """
-        else {
-          s"""flatten(
+          else {
+            s"""flatten(
            transform(filter($s.$init, x -> cardinality(x.$in) >= 0),
              x -> $transform_x )) as $name"""
 
-        }
+          }
 
         val zs   = (root :+ txs).mkString(",")
         val res2 = s"""struct($zs)"""

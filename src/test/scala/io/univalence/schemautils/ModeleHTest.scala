@@ -1,4 +1,5 @@
 package io.univalence.schemautils
+
 import java.io.PrintWriter
 
 import io.univalence.schemautils.FlattenNestedTargeted.{Path, PathPart}

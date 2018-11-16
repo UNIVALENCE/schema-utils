@@ -1,4 +1,5 @@
 package io.univalence.schemautils
+
 import io.univalence.schemautils.FlattenNestedTargeted.Path
 import org.apache.spark.sql.DataFrame
 import org.scalatest.FunSuite
@@ -77,7 +78,6 @@ class FlattenNestedTargetedTest extends FunSuite {
                ] }
              }""")
 
-
     val out1 = dfFromJson("""
       {
          idvisitor:1,
@@ -111,8 +111,6 @@ class FlattenNestedTargetedTest extends FunSuite {
       }}
     """)
 
-
-
     assertDfEqual(
       FlattenNestedTargeted.detach(
         in,
@@ -136,8 +134,6 @@ class FlattenNestedTargetedTest extends FunSuite {
       ),
       out2
     )
-
-
 
   }
 
@@ -166,7 +162,6 @@ class FlattenNestedTargetedTest extends FunSuite {
       }}
     """)
 
-
     assertDfEqual(
       FlattenNestedTargeted.detach(
         in,
@@ -179,12 +174,10 @@ class FlattenNestedTargetedTest extends FunSuite {
       out
     )
 
-
   }
 
   test("detach deep") {
-    val in = dfFromJson(
-      """
+    val in = dfFromJson("""
          { idvisitor: 1,
            visites : [
              {idvisite: 2,
@@ -195,8 +188,8 @@ class FlattenNestedTargetedTest extends FunSuite {
            }
       """)
 
-    val out = dfFromJson("""{"idvisitor":1,"visites":[{"idvisite":2,"recherches":[{"idrecherche":3}],"history":[{"recherche_idrecherche":3,"idrq":4}]}]}""")
-
+    val out = dfFromJson(
+      """{"idvisitor":1,"visites":[{"idvisite":2,"recherches":[{"idrecherche":3}],"history":[{"recherche_idrecherche":3,"idrq":4}]}]}""")
 
     val res = FlattenNestedTargeted.detach(
       in,
@@ -207,8 +200,7 @@ class FlattenNestedTargetedTest extends FunSuite {
       outer       = false
     )
 
-    assertDfEqual(res,out)
-
+    assertDfEqual(res, out)
 
   }
 

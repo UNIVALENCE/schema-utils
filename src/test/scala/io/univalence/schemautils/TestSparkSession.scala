@@ -1,4 +1,5 @@
 package io.univalence.schemautils
+
 import org.apache.spark.sql.{DataFrame, Dataset, Encoder, SparkSession}
 
 import scala.reflect.ClassTag

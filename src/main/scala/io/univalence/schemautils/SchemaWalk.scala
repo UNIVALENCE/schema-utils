@@ -1,4 +1,5 @@
 package io.univalence.schemautils
+
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.types.{ArrayType, DataType, StructType}
 
