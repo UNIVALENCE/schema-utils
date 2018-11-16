@@ -4,18 +4,14 @@ import io.univalence.schemautils.FlattenNestedTargeted.Path
 import org.apache.spark.sql.DataFrame
 import org.scalatest.FunSuiteLike
 
-class FlattenNestedTargetedTest extends FunSuiteLike {
+class FlattenNestedTargetedTest extends FunSuiteLike with TestSparkSession {
 
-  def assertDfEqual(f1: DataFrame, f2: DataFrame): Unit = {
-
-    assert(f1.toJSON.collect().toList == FlattenNestedTargeted.alignDataframe(f2, f1.schema).toJSON.collect().toList)
-
-  }
-
-  import TestSparkSession._
+  def assertDfEqual(f1: DataFrame, f2: DataFrame): Unit =
+    assert(
+      f1.toJSON.collect().toList
+        == FlattenNestedTargeted.alignDataframe(f2, f1.schema).toJSON.collect().toList)
 
   test("txPath") {
-
     val df = dfFromJson("""
              { a: 1,
                b: [{ c: [{ d: 4 },
@@ -61,11 +57,9 @@ class FlattenNestedTargetedTest extends FunSuiteLike {
         dfFromJson("{a:{b:{c:4,d:4}}}")
       )
     }
-
   }
 
   test("add_link") {
-
     val in = dfFromJson("""
              { idvisitor: 1,
                xxx: {visites:  [
@@ -132,7 +126,6 @@ class FlattenNestedTargetedTest extends FunSuiteLike {
       ),
       out2
     )
-
   }
 
   test("detach outer") {
@@ -171,7 +164,6 @@ class FlattenNestedTargetedTest extends FunSuiteLike {
       ),
       out
     )
-
   }
 
   test("detach deep") {
@@ -199,11 +191,9 @@ class FlattenNestedTargetedTest extends FunSuiteLike {
     )
 
     assertDfEqual(res, out)
-
   }
 
   test("detach 1") {
-
     val in = dfFromJson("""
              { idvisitor: 1,
                xxx: {visites:  [
@@ -237,11 +227,9 @@ class FlattenNestedTargetedTest extends FunSuiteLike {
       ),
       out
     )
-
   }
 
   test("toto") {
-
     val df = TestSparkSession.dfFromJson("""
              { a: 1,
                b: [{ c: [{ d: 4 },
@@ -289,11 +277,9 @@ class FlattenNestedTargetedTest extends FunSuiteLike {
               "c": { "d": 5 } },
             { "f": 7 }] }
    */
-
   }
 
   test("modeleH") {
-
     val df = TestSparkSession.dfFromJson("""
              { idvisitor: 1,
                visites:  [
@@ -322,8 +308,7 @@ class FlattenNestedTargetedTest extends FunSuiteLike {
 
     val dfres = TestSparkSession.ss.sql(
       """
-
-            select idvisitor,
+           select idvisitor,
 
 
            zip_with(
@@ -344,9 +329,6 @@ class FlattenNestedTargetedTest extends FunSuiteLike {
              recherche -> named_struct('visite_idvisite', visite.idvisite, 'idrecherche', recherche.idrecherche)))) as recherches
 
              from modeleh
-
-
-
 
           """.stripMargin)
     val res =
@@ -401,6 +383,6 @@ class FlattenNestedTargetedTest extends FunSuiteLike {
               "c": { "d": 5 } },
             { "f": 7 }] }
    */
-
   }
+
 }
