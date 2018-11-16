@@ -1,14 +1,11 @@
 package io.univalence.schemautils
 
-import org.apache.spark.sql.types._
 import org.apache.spark.sql.DataFrame
-import org.scalatest.FunSuite
-
+import org.apache.spark.sql.types._
+import org.scalatest.FunSuiteLike
 import scala.language.dynamics
 
-class JsonoidToTableTest extends FunSuite {
-
-  import TestSparkSession._
+class JsonoidToTableTest extends FunSuiteLike with TestSparkSession {
 
   ignore("story") {
 
@@ -75,7 +72,7 @@ class JsonoidToTableTest extends FunSuite {
   }
 
   test("in and out") {
-    val documentA = """
+    val documentA     = """
                     {
                       "a":{
                         "b":1,
@@ -89,7 +86,6 @@ class JsonoidToTableTest extends FunSuite {
                       "h": [{"i":9},{"i":10}]
                     }
                     """
-    import ss.implicits._
     val in: DataFrame = TestSparkSession.dfFromJson(documentA)
 
     //println(in.schema.prettyJson)

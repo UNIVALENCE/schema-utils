@@ -1,10 +1,9 @@
 package io.univalence.schemautils
 
-import io.univalence.schemautils.TestSparkSession.ss
 import org.apache.spark.sql.DataFrame
-import org.scalatest.FunSuite
+import org.scalatest.FunSuiteLike
 
-class FlattenNestedTest extends FunSuite {
+class FlattenNestedTest extends FunSuiteLike with TestSparkSession {
 
   test("basics") {
     val documentA: String = """
@@ -19,7 +18,6 @@ class FlattenNestedTest extends FunSuite {
                       "h": [{"i":9},{"i":10,"j":[{"k":11}]}]
                     }"""
 
-    import ss.implicits._
     val in0: DataFrame = TestSparkSession.dfFromJson(documentA)
 
     import org.apache.spark.sql.functions.expr

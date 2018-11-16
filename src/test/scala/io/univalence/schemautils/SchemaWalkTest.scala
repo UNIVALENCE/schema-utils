@@ -4,9 +4,8 @@ import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.types._
 import org.scalatest.{FunSuiteLike, Matchers}
 
-class SchemaWalkTest extends FunSuiteLike with Matchers {
+class SchemaWalkTest extends FunSuiteLike with Matchers with TestSparkSession {
 
-  import TestSparkSession.ss
   import ss.implicits._
 
   test("should have same data type when same type") {

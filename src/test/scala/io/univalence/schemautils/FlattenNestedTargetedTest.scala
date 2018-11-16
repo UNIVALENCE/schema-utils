@@ -2,13 +2,11 @@ package io.univalence.schemautils
 
 import io.univalence.schemautils.FlattenNestedTargeted.Path
 import org.apache.spark.sql.DataFrame
-import org.scalatest.FunSuite
+import org.scalatest.FunSuiteLike
 
-class FlattenNestedTargetedTest extends FunSuite {
+class FlattenNestedTargetedTest extends FunSuiteLike {
 
   def assertDfEqual(f1: DataFrame, f2: DataFrame): Unit = {
-
-    import org.apache.spark.sql.functions._
 
     assert(f1.toJSON.collect().toList == FlattenNestedTargeted.alignDataframe(f2, f1.schema).toJSON.collect().toList)
 
