@@ -6,9 +6,27 @@ import org.apache.spark.sql.types.{ArrayType, DataType, StructField, StructType}
 import scala.annotation.tailrec
 import scala.util.{Random, Try}
 
-object GenSym {
+//uStateMonad
+case class State[S, A](run: S => (A, S)) {
+  def map[B](f: A => B): State[S, B] =
+    State(s => {
+      val (a, n) = run(s)
+      (f(a), n)
+    })
 
-  val genTempTableName: SparkSession => String = {
+  def flatMap[B](f: A => State[S, B]): State[S, B] =
+    State(s => {
+      val (a, n) = this.run(s)
+      f(a).run(n)
+    })
+
+  def exec(state: S): A = run(state)._1
+}
+
+object GenSym {
+  val nextSym: State[Int, String] = State[Int, String](x => ("tmpSym" + x, x + 1))
+
+  val genTempTableName_! : SparkSession => String = {
     var x = 0
 
     def f(ss: SparkSession): String = {
@@ -59,33 +77,47 @@ object FlattenNestedTargeted {
   case class Tablename(name: String) extends AnyVal
 
   def sql(input: DataFrame)(query: Tablename => String): DataFrame = {
-    val ss        = input.sparkSession
-    val inputName = "input" + Random.nextInt(10000)
+    val ss: SparkSession = input.sparkSession
 
-    input.createTempView(inputName)
-    val out = ss.sql(query(Tablename(inputName)))
-    ss.catalog.dropTempView(inputName)
+    val tempTableName: String = GenSym.genTempTableName_!(ss)
+
+    input.createTempView(tempTableName)
+
+    val out: DataFrame = ss.sql(query(Tablename(tempTableName)))
+
+    ss.catalog.dropTempView(tempTableName)
 
     out
   }
 
   def alignDataframe(df: DataFrame, schema: StructType): DataFrame = {
 
-    def genSelect(dataType: DataType, exp: String, top: Boolean = false): String =
-      dataType match {
-        case StructType(fields) =>
-          val allFields: Seq[String] = fields.map(x => genSelect(x.dataType, exp + "." + x.name) + " as " + x.name)
+    sealed trait Out {
+      def exp: String
+    }
+    case class SingleExp(exp: String) extends Out
 
-          if (top) allFields.mkString(", ")
-          else allFields.mkString("struct(", ",", ")")
+    case class StructExp(fieldExps: Seq[(Out, String)]) extends Out {
+      override def exp: String = fieldExps.map(x => x._1.exp + " as " + x._2).mkString("struct(", ", ", ")")
+      def asProjection: String = fieldExps.map(x => x._1.exp + " as " + x._2).mkString(", ")
+    }
 
-        case ArrayType(elementType, _) =>
-          s"transform($exp, x -> ${genSelect(elementType, "x")})"
+    def genSelectStruct(structType: StructType, source: String): StructExp = {
+      def genSelectDataType(dataType: DataType, source: String): Out =
+        dataType match {
+          case st: StructType => genSelectStruct(st, source)
 
-        case _ => exp
-      }
+          case ArrayType(elementType, _) =>
+            SingleExp(s"transform($source, x -> ${genSelectDataType(elementType, "x").exp})")
 
-    sql(df)(x => s"select ${genSelect(schema, x.name, top = true)} from ${x.name}")
+          case _ => SingleExp(source)
+        }
+
+      StructExp(structType.fields.map(x => genSelectDataType(x.dataType, source + "." + x.name) -> x.name))
+    }
+
+    sql(df)(tmpTableName =>
+      s"select ${genSelectStruct(schema, tmpTableName.name).asProjection} from ${tmpTableName.name}")
   }
 
   sealed trait PathPart
@@ -152,7 +184,7 @@ object FlattenNestedTargeted {
           else exprs.mkString("struct(", ", ", s")")
       }
 
-    val tempTableName = GenSym.genTempTableName(dataFrame.sparkSession)
+    val tempTableName = GenSym.genTempTableName_!(dataFrame.sparkSession)
     dataFrame.createTempView(tempTableName)
 
     val projection = rewrite(dataFrame.schema, target, top = true, tempTableName)
