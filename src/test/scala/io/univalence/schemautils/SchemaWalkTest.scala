@@ -4,7 +4,7 @@ import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.types._
 import org.scalatest.{FunSuiteLike, Matchers}
 
-class SchemaWalkTest extends FunSuiteLike with Matchers with TestSparkSession {
+class SchemaWalkTest extends FunSuiteLike with Matchers with SparkTest {
 
   import ss.implicits._
 

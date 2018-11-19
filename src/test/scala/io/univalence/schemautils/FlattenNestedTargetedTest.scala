@@ -3,7 +3,7 @@ package io.univalence.schemautils
 import io.univalence.schemautils.FlattenNestedTargeted.Path
 import org.scalatest.FunSuiteLike
 
-class FlattenNestedTargetedTest extends FunSuiteLike with TestSparkSession {
+class FlattenNestedTargetedTest extends SparkTest with FunSuiteLike {
 
   test("add_link") {
     val in = dfFromJson("""
@@ -175,7 +175,7 @@ class FlattenNestedTargetedTest extends FunSuiteLike with TestSparkSession {
   }
 
   test("toto") {
-    val df = TestSparkSession.dfFromJson("""
+    val df = dfFromJson("""
              { a: 1,
                b: [{ c: [{ d: 4 },
                          { d: 5 }],
@@ -225,7 +225,7 @@ class FlattenNestedTargetedTest extends FunSuiteLike with TestSparkSession {
   }
 
   test("modeleH") {
-    val df = TestSparkSession.dfFromJson("""
+    val df = dfFromJson("""
              { idvisitor: 1,
                visites:  [
                {idvisite : 2, recherches: [{idrecherche:3}, {idrecherche:4}] },
@@ -251,7 +251,7 @@ class FlattenNestedTargetedTest extends FunSuiteLike with TestSparkSession {
 
     df.createTempView("modeleh")
 
-    val dfres = TestSparkSession.ss.sql(
+    val dfres = ss.sql(
       """
            select idvisitor,
 
@@ -283,7 +283,7 @@ class FlattenNestedTargetedTest extends FunSuiteLike with TestSparkSession {
 
     dfres.createTempView("modelehflat")
 
-    TestSparkSession.ss.sql("""select
+    ss.sql("""select
          visite.idvisite,
          transform(visite.recherches_link,
          link -> element_at(recherches,link + 1)) as recherches

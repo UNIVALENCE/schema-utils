@@ -9,17 +9,17 @@ import org.scalatest.FunSuite
 import scala.io.Source
 import scala.util.Try
 
-class ModeleHTest extends FunSuite {
+class ModeleHTest extends FunSuite with SparkTest {
 
   def loadSchema: StructType = {
-    val df = TestSparkSession.ss.read
+    val df = ss.read
       .parquet("/Users/jon/Downloads/part-00000-b72d11c6-55d0-4e30-a1e7-f58cacced654-c000.snappy.parquet")
     df.schema
 
   }
 
   def saveSchema(structType: StructType): Unit = {
-    new PrintWriter("schema.json") { write(structType.prettyJson); close }
+    new PrintWriter("schema.json") { write(structType.prettyJson); close() }
   }
 
   def loadSchemaFromFile(): Try[StructType] = {

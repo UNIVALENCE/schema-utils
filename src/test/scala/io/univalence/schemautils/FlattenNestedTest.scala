@@ -3,7 +3,7 @@ package io.univalence.schemautils
 import org.apache.spark.sql.DataFrame
 import org.scalatest.FunSuiteLike
 
-class FlattenNestedTest extends FunSuiteLike with TestSparkSession {
+class FlattenNestedTest extends FunSuiteLike with SparkTest {
 
   test("basics") {
     val documentA: String = """
@@ -18,7 +18,7 @@ class FlattenNestedTest extends FunSuiteLike with TestSparkSession {
                       "h": [{"i":9},{"i":10,"j":[{"k":11}]}]
                     }"""
 
-    val in0: DataFrame = TestSparkSession.dfFromJson(documentA)
+    val in0: DataFrame = dfFromJson(documentA)
 
     import org.apache.spark.sql.functions.expr
 
@@ -43,7 +43,7 @@ class FlattenNestedTest extends FunSuiteLike with TestSparkSession {
   test("double array") {
     val document: String = """{"a":[1,2],"b":[3,4]}"""
 
-    val in0: DataFrame = TestSparkSession.dfFromJson(document)
+    val in0: DataFrame = dfFromJson(document)
 
     val df = FlattenNested(in0)
 

@@ -1,16 +1,18 @@
 package io.univalence.schemautils
 
 import org.apache.spark.sql.{DataFrame, Dataset, Encoder, SparkSession}
+import org.scalatest.{Assertions, FunSuite}
+
 import scala.reflect.ClassTag
 
-trait TestSparkSession {
+trait SparkTest extends Assertions {
 
   val ss: SparkSession =
     SparkSession
       .builder()
       .master("local")
       .config("spark.default.parallelism", 1)
-      .config("spark.ui.enabled", value = false)
+      .config("spark.ui.enabled", value = true)
       .getOrCreate()
 
   def smallDs[T: Encoder: ClassTag](t: T*): Dataset[T] = {
@@ -28,10 +30,13 @@ trait TestSparkSession {
   }
 
   def assertDfEqual(f1: DataFrame, f2: DataFrame): Unit =
-    assert(
-      f1.toJSON.collect().toList
-        == FlattenNestedTargeted.alignDataframe(f2, f1.schema).toJSON.collect().toList)
+    assert(f1.toJSON.collect().toList == AlignDataframe(f2, f1.schema).toJSON.collect().toList)
+
+  def assertDsEqual[A](ds: Dataset[A], as: A*): Unit = {
+    assert(ds.collect().toSeq == as)
+
+  }
 
 }
 
-object TestSparkSession extends TestSparkSession
+object SparkTest extends SparkTest

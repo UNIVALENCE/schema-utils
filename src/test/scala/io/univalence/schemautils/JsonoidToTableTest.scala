@@ -5,7 +5,7 @@ import org.apache.spark.sql.types._
 import org.scalatest.FunSuiteLike
 import scala.language.dynamics
 
-class JsonoidToTableTest extends FunSuiteLike with TestSparkSession {
+class JsonoidToTableTest extends FunSuiteLike with SparkTest {
 
   ignore("story") {
 
@@ -24,7 +24,7 @@ class JsonoidToTableTest extends FunSuiteLike with TestSparkSession {
                     }
                     """
 
-    val in: DataFrame = TestSparkSession.dfFromJson(documentA)
+    val in: DataFrame = dfFromJson(documentA)
 
     in.printSchema()
     /*
@@ -86,7 +86,7 @@ class JsonoidToTableTest extends FunSuiteLike with TestSparkSession {
                       "h": [{"i":9},{"i":10}]
                     }
                     """
-    val in: DataFrame = TestSparkSession.dfFromJson(documentA)
+    val in: DataFrame = dfFromJson(documentA)
 
     //println(in.schema.prettyJson)
     assert(JsonoidToTable(in).toJSON.head() == """{"a_b":1,"a_c":2,"a_d_e":3,"f":4}""")

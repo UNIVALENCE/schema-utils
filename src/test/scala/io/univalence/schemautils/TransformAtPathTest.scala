@@ -3,7 +3,7 @@ package io.univalence.schemautils
 import io.univalence.schemautils.FlattenNestedTargeted.Path
 import org.scalatest.FunSpecLike
 
-class TransformAtPathTest extends FunSpecLike with TestSparkSession {
+class TransformAtPathTest extends FunSpecLike with SparkTest {
 
   describe("Transform at path of a nested JSON document") {
     val df = dfFromJson("""

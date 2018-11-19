@@ -4,7 +4,7 @@ import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.apache.spark.sql.types.{ArrayType, DataType, StructField, StructType}
 
 import scala.annotation.tailrec
-import scala.util.{Random, Try}
+import scala.util.{Failure, Random, Try}
 
 //uStateMonad
 case class State[S, A](run: S => (A, S)) {
@@ -90,36 +90,6 @@ object FlattenNestedTargeted {
     out
   }
 
-  def alignDataframe(df: DataFrame, schema: StructType): DataFrame = {
-
-    sealed trait Out {
-      def exp: String
-    }
-    case class SingleExp(exp: String) extends Out
-
-    case class StructExp(fieldExps: Seq[(Out, String)]) extends Out {
-      override def exp: String = fieldExps.map(x => x._1.exp + " as " + x._2).mkString("struct(", ", ", ")")
-      def asProjection: String = fieldExps.map(x => x._1.exp + " as " + x._2).mkString(", ")
-    }
-
-    def genSelectStruct(structType: StructType, source: String): StructExp = {
-      def genSelectDataType(dataType: DataType, source: String): Out =
-        dataType match {
-          case st: StructType => genSelectStruct(st, source)
-
-          case ArrayType(elementType, _) =>
-            SingleExp(s"transform($source, x -> ${genSelectDataType(elementType, "x").exp})")
-
-          case _ => SingleExp(source)
-        }
-
-      StructExp(structType.fields.map(x => genSelectDataType(x.dataType, source + "." + x.name) -> x.name))
-    }
-
-    sql(df)(tmpTableName =>
-      s"select ${genSelectStruct(schema, tmpTableName.name).asProjection} from ${tmpTableName.name}")
-  }
-
   sealed trait PathPart
   object PathPart {
 
@@ -163,7 +133,7 @@ object FlattenNestedTargeted {
       case (Seq(PathPart.Array, xs @ _*), s: ArrayType) => dataTypeAtPath(xs, s.elementType)
       case (Seq(PathPart.Field(name), xs @ _*), s: StructType) =>
         dataTypeAtPath(xs, s.fields(s.fieldIndex(name)).dataType)
-      case _ => Try(???)
+      case _ => Failure(new Exception(s"$target not in $dataType"))
     }
 
   def transformAtPath(target: Path, tx: (DataType, String) => String)(dataFrame: DataFrame): DataFrame = {
