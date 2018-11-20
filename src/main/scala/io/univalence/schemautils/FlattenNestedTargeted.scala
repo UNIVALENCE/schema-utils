@@ -4,6 +4,7 @@ import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.apache.spark.sql.types.{ArrayType, DataType, StructField, StructType}
 
 import scala.annotation.tailrec
+import scala.language.dynamics
 import scala.util.{Failure, Random, Try}
 
 //uStateMonad
@@ -107,6 +108,17 @@ object FlattenNestedTargeted {
 
   object Path {
 
+
+    trait PathBuilder extends Dynamic {
+      def selectDynamic(name:String):PathBuilder = ???
+
+      def `>`:PathBuilder = ???
+    }
+
+    object root extends PathBuilder {
+    }
+
+
     def fromString(str: String): Path =
       str
         .split('.')
@@ -136,29 +148,29 @@ object FlattenNestedTargeted {
       case _ => Failure(new Exception(s"$target not in $dataType"))
     }
 
-  def transformAtPath(target: Path, tx: (DataType, String) => String)(dataFrame: DataFrame): DataFrame = {
+  def transformAtPath(target: Path, tx: (DataType, String) => StrExp)(dataFrame: DataFrame): DataFrame = {
 
-    def rewrite(dataType: DataType, target: Path, top: Boolean = false, expr: String): String =
+    def rewrite(dataType: DataType, target: Path, expr: String): StrExp =
       (target, dataType) match {
         case (Seq(), _) => tx(dataType, expr)
         case (Seq(PathPart.Array, xs @ _*), ArrayType(elementType, _)) =>
-          s"transform($expr, x -> ${rewrite(elementType, xs, top = false, "x")})"
+          SingleExp(s"transform($expr, x -> ${rewrite(elementType, xs, "x").exp})")
 
         case (Seq(PathPart.Field(name), xs @ _*), StructType(fields)) =>
-          val exprs = fields.map({
-            case StructField(`name`, dt, _, _) => rewrite(dt, xs, expr = expr + "." + name) + s" as $name"
-            case StructField(x, dt, _, _)      => s"$expr.$x as $x"
+          val exprs: Array[(StrExp, String)] = fields.map({
+            case StructField(`name`, dt, _, _) => rewrite(dt, xs, expr = expr + "." + name) -> name
+            case StructField(x, dt, _, _)      => SingleExp(s"$expr.$x") -> x
           })
 
-          if (top) exprs.mkString(", ")
-          else exprs.mkString("struct(", ", ", s")")
+          StructExp(exprs)
       }
 
     val tempTableName = GenSym.genTempTableName_!(dataFrame.sparkSession)
     dataFrame.createTempView(tempTableName)
 
-    val projection = rewrite(dataFrame.schema, target, top = true, tempTableName)
-    val out        = dataFrame.sparkSession.sql(s"select $projection from $tempTableName")
+    val projection = rewrite(dataFrame.schema, target, tempTableName).asInstanceOf[StructExp]
+    println(projection)
+    val out = dataFrame.sparkSession.sql(s"select ${projection.asProjection} from $tempTableName")
 
     dataFrame.sparkSession.catalog.dropTempView(tempTableName)
 
@@ -167,7 +179,7 @@ object FlattenNestedTargeted {
 
   def detach(dataFrame: DataFrame,
              target: Path,
-             fieldname: Seq[String] => String,
+             fieldname: Seq[String]   => String,
              includeRoot: Seq[String] => Option[String],
              addLink: Boolean = true,
              outer: Boolean   = true): DataFrame = {
@@ -201,7 +213,7 @@ object FlattenNestedTargeted {
 
         val in = rest.mkString(".")
 
-        val root: Array[String] =
+        val root: Array[(StrExp, String)] =
           dt.asInstanceOf[StructType]
             .fieldNames
             .map({
@@ -213,10 +225,10 @@ object FlattenNestedTargeted {
                     else
                       s"""offset(transform($s.$init, x -> cardinality(x.$in)))"""
 
-                  s"zip_with($size_array,$s.$init, (n,x) -> struct($root_xs, n as ${name}_link )) as $init"
+                  SingleExp(s"zip_with($size_array,$s.$init, (n,x) -> struct($root_xs, n as ${name}_link ))") -> init
                 } else
-                  s"""transform($s.$init, x -> struct($root_xs)) as $init"""
-              case n => s"$s.$n as $n"
+                  SingleExp(s"""transform($s.$init, x -> struct($root_xs))""") -> init
+              case n => SingleExp(s"$s.$n") -> n
             })
 
         val empty_ys = y.fields.map(f => s"cast(null as ${f.dataType.catalogString}) as ${f.name}").mkString(", ")
@@ -225,28 +237,25 @@ object FlattenNestedTargeted {
 
         val transform_x = s"""transform(x.$in, y -> struct($xs, $ys))"""
 
-        val txs =
-          if (outer)
-            s"""flatten(transform($s.$init,
+        val txs: (StrExp, String) =
+          SingleExp(
+            if (outer)
+              s"""flatten(transform($s.$init,
             x -> if(cardinality(x.$in) > 0,
             $transform_x,
             $outer_array
             )
 
 
-            )) as $name
+            ))
           """
-          else {
-            s"""flatten(
+            else {
+              s"""flatten(
            transform(filter($s.$init, x -> cardinality(x.$in) >= 0),
-             x -> $transform_x )) as $name"""
+             x -> $transform_x )) """
+            }) -> name
 
-          }
-
-        val zs   = (root :+ txs).mkString(",")
-        val res2 = s"""struct($zs)"""
-
-        res2
+        StructExp(root :+ txs)
 
       }
     )(dataFrame)

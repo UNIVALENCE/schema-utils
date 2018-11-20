@@ -4,22 +4,21 @@ import org.apache.spark.sql.catalyst.encoders.ExpressionEncoder
 import org.apache.spark.sql.{DataFrame, Dataset, Encoder}
 import org.apache.spark.sql.types.{ArrayType, DataType, StructType}
 
+sealed trait StrExp {
+  def exp: String
+}
+case class SingleExp(exp: String) extends StrExp
+
+case class StructExp(fieldExps: Seq[(StrExp, String)]) extends StrExp {
+  override def exp: String = fieldExps.map(x => x._1.exp + " as " + x._2).mkString("struct(", ", ", ")")
+  def asProjection: String = fieldExps.map(x => x._1.exp + " as " + x._2).mkString(", ")
+}
+
 object AlignDataframe {
 
   def apply(df: DataFrame, schema: StructType): DataFrame = {
-
-    sealed trait Out {
-      def exp: String
-    }
-    case class SingleExp(exp: String) extends Out
-
-    case class StructExp(fieldExps: Seq[(Out, String)]) extends Out {
-      override def exp: String = fieldExps.map(x => x._1.exp + " as " + x._2).mkString("struct(", ", ", ")")
-      def asProjection: String = fieldExps.map(x => x._1.exp + " as " + x._2).mkString(", ")
-    }
-
     def genSelectStruct(structType: StructType, source: String): StructExp = {
-      def genSelectDataType(dataType: DataType, source: String): Out =
+      def genSelectDataType(dataType: DataType, source: String): StrExp =
         dataType match {
           case st: StructType => genSelectStruct(st, source)
 

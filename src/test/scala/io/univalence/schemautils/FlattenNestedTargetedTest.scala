@@ -1,6 +1,7 @@
 package io.univalence.schemautils
 
-import io.univalence.schemautils.FlattenNestedTargeted.Path
+import io.univalence.schemautils.FlattenNestedTargeted.{Path, PathPart}
+import org.apache.spark.sql.SaveMode
 import org.scalatest.FunSuiteLike
 
 class FlattenNestedTargetedTest extends SparkTest with FunSuiteLike {
@@ -222,6 +223,28 @@ class FlattenNestedTargetedTest extends SparkTest with FunSuiteLike {
               "c": { "d": 5 } },
             { "f": 7 }] }
    */
+  }
+
+  test("modeleH2") {
+
+    val df = dfFromJson("""
+             { idvisitor: 1,
+               visites:  [
+               {idvisite : 2, recherches: [{idrecherche:3}, {idrecherche:4}] },
+               {idvisite: 3},
+               {idvisite: 5, recherches: [{idrecherche:6}]}
+               ]
+             }""")
+
+    val out = FlattenNestedTargeted.detach(df,
+                                           Path.fromString("visites.[].recherches"),
+                                           _.mkString("_"),
+                                           x => Some(x.mkString("_")))
+
+    out.printSchema()
+
+    out.write.mode(SaveMode.Overwrite).parquet("target/tmpdata/modeleH2")
+
   }
 
   test("modeleH") {

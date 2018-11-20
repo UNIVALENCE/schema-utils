@@ -15,7 +15,7 @@ class TransformAtPathTest extends FunSpecLike with SparkTest {
              }""")
 
     it("increase a value in the root") {
-      val result = FlattenNestedTargeted.transformAtPath(Path.fromString("a"), (_, x) => s"$x + 1")(df)
+      val result = FlattenNestedTargeted.transformAtPath(Path.fromString("a"), (_, x) => SingleExp(s"$x + 1"))(df)
 
       assertDfEqual(
         result,
@@ -30,7 +30,7 @@ class TransformAtPathTest extends FunSpecLike with SparkTest {
     }
 
     it("should increase a value nested in a struct and an array") {
-      val result = FlattenNestedTargeted.transformAtPath(Path.fromString("b.[].e"), (_, x) => s"$x + 1")(df)
+      val result = FlattenNestedTargeted.transformAtPath(Path.fromString("b.[].e"), (_, x) => SingleExp(s"$x + 1"))(df)
 
       assertDfEqual(
         result,
@@ -46,7 +46,7 @@ class TransformAtPathTest extends FunSpecLike with SparkTest {
 
     it("should increase a value in nested structs") {
       val in     = dfFromJson("{a:{b:{c:3,d:4}}}")
-      val result = FlattenNestedTargeted.transformAtPath(Path.fromString("a.b.c"), (_, x) => s"$x + 1")(in)
+      val result = FlattenNestedTargeted.transformAtPath(Path.fromString("a.b.c"), (_, x) => SingleExp(s"$x + 1"))(in)
 
       assertDfEqual(
         result,

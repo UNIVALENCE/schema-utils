@@ -101,8 +101,4 @@ class SchemaAlign extends FunSuite with SparkTest {
 
   }
 
-  test("slow") {
-    Thread.sleep(100000)
-  }
-
 }
