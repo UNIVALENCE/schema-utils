@@ -1,11 +1,11 @@
 package io.univalence.schemautils
 
-import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.apache.spark.sql.types.{ArrayType, DataType, StructField, StructType}
+import org.apache.spark.sql.{DataFrame, SparkSession}
 
 import scala.annotation.tailrec
 import scala.language.dynamics
-import scala.util.{Failure, Random, Try}
+import scala.util.{Failure, Success, Try}
 
 //uStateMonad
 case class State[S, A](run: S => (A, S)) {
@@ -91,90 +91,85 @@ object FlattenNestedTargeted {
     out
   }
 
-  sealed trait PathPart
-  object PathPart {
-
-    case class Field(name: String) extends PathPart {
-      override def toString: String = name
-    }
-
-    case object Array extends PathPart {
-      override def toString: String = "[]"
-    }
-
-  }
-
-  type Path = Seq[PathPart]
-
-  object Path {
-
-
-    trait PathBuilder extends Dynamic {
-      def selectDynamic(name:String):PathBuilder = ???
-
-      def `>`:PathBuilder = ???
-    }
-
-    object root extends PathBuilder {
-    }
-
-
-    def fromString(str: String): Path =
-      str
-        .split('.')
-        .map({
-          case "[]" => PathPart.Array
-          case x    => PathPart.Field(x)
-        })
-
-    def toString(path: Path): String = path.mkString(".")
-
-  }
-
   def allPaths(dataType: DataType): Seq[Path] =
     dataType match {
-      case StructType(fields) => fields.flatMap(x => allPaths(x.dataType).map(y => PathPart.Field(x.name) +: y)).toSeq
-      case ArrayType(e, _)    => allPaths(e).map(PathPart.Array +: _)
-      case _                  => Seq(Nil)
+      case StructType(fields) => fields.flatMap(x => allPaths(x.dataType).map(_.prefix(x.name)))
+      case ArrayType(e, _)    => allPaths(e).map(_.inArray)
+      case _                  => Seq(Path.root)
     }
 
   @tailrec
   def dataTypeAtPath(target: Path, dataType: DataType): Try[DataType] =
-    (target, dataType) match {
-      case (Seq(), x)                                   => Try(x)
-      case (Seq(PathPart.Array, xs @ _*), s: ArrayType) => dataTypeAtPath(xs, s.elementType)
-      case (Seq(PathPart.Field(name), xs @ _*), s: StructType) =>
-        dataTypeAtPath(xs, s.fields(s.fieldIndex(name)).dataType)
-      case _ => Failure(new Exception(s"$target not in $dataType"))
+    target.split.head match {
+      case None => Try(dataType)
+      case Some((head, rest)) =>
+        (head, dataType) match {
+          case (Path.Part.Array, s: ArrayType)        => dataTypeAtPath(rest, s.elementType)
+          case (Path.Part.Field(name), s: StructType) => dataTypeAtPath(rest, s.fields(s.fieldIndex(name)).dataType)
+          case _                                      => Failure(new Exception(s"$target not in $dataType"))
+
+        }
     }
 
   def transformAtPath(target: Path, tx: (DataType, String) => StrExp)(dataFrame: DataFrame): DataFrame = {
 
     def rewrite(dataType: DataType, target: Path, expr: String): StrExp =
-      (target, dataType) match {
-        case (Seq(), _) => tx(dataType, expr)
-        case (Seq(PathPart.Array, xs @ _*), ArrayType(elementType, _)) =>
-          SingleExp(s"transform($expr, x -> ${rewrite(elementType, xs, "x").exp})")
+      target.split.head match {
+        case None => tx(dataType, expr)
+        case Some((part, xs)) =>
+          (part, dataType) match {
+            case (Path.Part.Array, ArrayType(elementType, _)) =>
+              SingleExp(s"transform($expr, x -> ${rewrite(elementType, xs, "x").exp})")
 
-        case (Seq(PathPart.Field(name), xs @ _*), StructType(fields)) =>
-          val exprs: Array[(StrExp, String)] = fields.map({
-            case StructField(`name`, dt, _, _) => rewrite(dt, xs, expr = expr + "." + name) -> name
-            case StructField(x, dt, _, _)      => SingleExp(s"$expr.$x") -> x
-          })
+            case (Path.Part.Field(name), StructType(fields)) =>
+              val exprs: Array[(StrExp, String)] = fields.map({
+                case StructField(`name`, dt, _, _) => rewrite(dt, xs, expr = expr + "." + name) -> name
+                case StructField(x, _, _, _)       => SingleExp(s"$expr.$x") -> x
+              })
 
-          StructExp(exprs)
+              StructExp(exprs)
+          }
       }
 
     val tempTableName = GenSym.genTempTableName_!(dataFrame.sparkSession)
     dataFrame.createTempView(tempTableName)
 
     val projection = rewrite(dataFrame.schema, target, tempTableName).asInstanceOf[StructExp]
-    println(projection)
-    val out = dataFrame.sparkSession.sql(s"select ${projection.asProjection} from $tempTableName")
+    val out        = dataFrame.sparkSession.sql(s"select ${projection.asProjection} from $tempTableName")
 
     dataFrame.sparkSession.catalog.dropTempView(tempTableName)
 
     out
+  }
+
+  def dropField(path: Path, df: DataFrame): DataFrame = {
+
+    val Some((xs, Path.Part.Field(name))) = path.split.last
+
+    FlattenNestedTargeted.transformAtPath(xs, {
+      case (st: StructType, expr) => StructExp(st.fieldNames.filter(_ != name).map(x => SingleExp(s"$expr.$x") -> x))
+    })(df)
+  }
+
+  def removeArray(dataFrame: DataFrame, path: Path): DataFrame = {
+
+    assert(dataTypeAtPath(path, dataFrame.schema).isInstanceOf[Success[ArrayType]])
+
+    val target = path.parts
+    target.lastIndexOf(Path.Part.Array) match {
+      case -1 => ??? // Explode
+      case n =>
+        val root = target.take(n)
+        val rest = target.drop(n + 1)
+        assert(rest.nonEmpty)
+        assert(root.nonEmpty)
+
+        transformAtPath(Path.fromParts(root), (dt, path) => {
+
+          SingleExp(s"")
+
+        })(dataFrame)
+    }
   }
 
   def detach(dataFrame: DataFrame,
@@ -186,9 +181,9 @@ object FlattenNestedTargeted {
     dataFrame.sparkSession.udf.register("offset_outer", offset_outer _)
     dataFrame.sparkSession.udf.register("offset", offset _)
 
-    val (scope, follow) = target.splitAt(target.lastIndexOf(PathPart.Array) - 1)
+    val Some((xxx, rest)) = target.split.lastArray
 
-    val Seq(PathPart.Field(init), PathPart.Array, rest @ _*) = follow
+    val Some((scope, Path.Part.Field(init))) = xxx.split.last
 
     transformAtPath(
       scope,
@@ -199,11 +194,11 @@ object FlattenNestedTargeted {
         val x: StructType =
           fields.find(_.name == init).get.dataType.asInstanceOf[ArrayType].elementType.asInstanceOf[StructType]
 
-        val all = x.fieldNames.filter(_ != rest.head.asInstanceOf[PathPart.Field].name)
+        val all = x.fieldNames.filter(_ != rest.parts.head.asInstanceOf[Path.Part.Field].name)
 
         val xs = all.flatMap(name => includeRoot(name :: Nil).map(n => s"x.$name as $n")).mkString(",")
 
-        val name: String = fieldname(rest.map({ case PathPart.Field(n) => n }))
+        val name: String = fieldname(rest.parts.map({ case Path.Part.Field(n) => n }))
 
         val y = dataTypeAtPath(rest, x).get.asInstanceOf[ArrayType].elementType.asInstanceOf[StructType]
 
@@ -211,7 +206,7 @@ object FlattenNestedTargeted {
 
         val root_xs = all.map(name => s"x.$name as $name").mkString(", ")
 
-        val in = rest.mkString(".")
+        val in = rest.asCode
 
         val root: Array[(StrExp, String)] =
           dt.asInstanceOf[StructType]

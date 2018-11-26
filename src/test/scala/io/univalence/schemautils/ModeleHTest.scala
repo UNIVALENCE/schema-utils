@@ -2,7 +2,6 @@ package io.univalence.schemautils
 
 import java.io.PrintWriter
 
-import io.univalence.schemautils.FlattenNestedTargeted.{Path, PathPart}
 import org.apache.spark.sql.{DataFrame, SaveMode}
 import org.apache.spark.sql.types.{DataType, StructType}
 import org.scalatest.FunSuite
@@ -45,12 +44,14 @@ class ModeleHTest extends FunSuite with SparkTest {
 
   }
 
-  test("remove history") {
+  ignore("remove history") {
+
+    import FlattenNestedTargeted._
 
     type Endo = DataFrame => DataFrame
 
     val detachProduitsDisplay: Endo = in =>
-      FlattenNestedTargeted.detach(
+      detach(
         dataFrame   = in,
         target      = Path.fromString("visites.[].recherches.[].history.[].produitsDisplay"),
         fieldname   = _.mkString("_"),
@@ -59,7 +60,7 @@ class ModeleHTest extends FunSuite with SparkTest {
     )
 
     val suggestion: Endo = in =>
-      FlattenNestedTargeted.detach(
+      detach(
         dataFrame   = in,
         target      = Path.fromString("visites.[].recherches.[].history.[].suggestion"),
         fieldname   = _.mkString("_"),
@@ -68,7 +69,7 @@ class ModeleHTest extends FunSuite with SparkTest {
     )
 
     val detachLrs1: Endo = in =>
-      FlattenNestedTargeted.detach(
+      detach(
         dataFrame   = in,
         target      = Path.fromString("visites.[].recherches.[].history.[].bandeaux.[].lrs"),
         fieldname   = _.mkString("_"),
@@ -77,7 +78,7 @@ class ModeleHTest extends FunSuite with SparkTest {
     )
 
     val detachLrs2: Endo = in =>
-      FlattenNestedTargeted.detach(
+      detach(
         dataFrame   = in,
         target      = Path.fromString("visites.[].recherches.[].history.[].lrs"),
         fieldname   = _.mkString("_"),
@@ -86,7 +87,7 @@ class ModeleHTest extends FunSuite with SparkTest {
     )
 
     val detachRecherches: Endo = in =>
-      FlattenNestedTargeted.detach(
+      detach(
         dataFrame   = in,
         target      = Path.fromString("visites.[].recherches"),
         fieldname   = _.mkString("_"),
@@ -94,9 +95,14 @@ class ModeleHTest extends FunSuite with SparkTest {
         outer       = false
     )
 
+    //val dropLrsHistoryProduitsDisplay:Endo = in => dropField(Path.fromString("recherches.[].lrs.[].history_produitsDisplay"),in)
+
     val tx = Seq(
+      detachLrs1,
+      detachLrs2,
+      detachProduitsDisplay,
+      suggestion,
       detachRecherches
-      //detachLrs1,detachLrs2,detachProduitsDisplay,suggestion,
 
       //,suggestion,detachLrs1,detachLrs2,detachRecherches
     ).reduce((f, g) => f.andThen(g))
@@ -105,10 +111,10 @@ class ModeleHTest extends FunSuite with SparkTest {
 
     def sizePath(path: Path): Int = {
 
-      1 + path
+      1 + path.parts
         .map({
-          case PathPart.Array => 2
-          case _              => 1
+          case Path.Part.Array => 2
+          case _               => 1
         })
         .sum
 
@@ -117,22 +123,56 @@ class ModeleHTest extends FunSuite with SparkTest {
     //visites
     //history
     //bandeaux
-    FlattenNestedTargeted
-      .allPaths(out.schema)
-      .filter(x => sizePath(x) >= 15) //+ 3 + 3 + 3)
-      .foreach(x => println(sizePath(x) -> x))
 
-    out.limit(10).write.mode(SaveMode.Overwrite).parquet("target/testOut")
+    val toRemove: Set[String] = Set("history_bandeaux",
+                                    "visite_pagesAT",
+                                    "history_lrs_link",
+                                    "history_produitsDisplay_link",
+                                    "history_produitsDisplay")
+
+    val drop = FlattenNestedTargeted
+      .allPaths(out.schema)
+      .filter(x =>
+        x.parts.exists({
+          case Path.Part.Field(name) => toRemove(name)
+          case _                     => false
+        }))
+      .map(x => {
+
+        val idx = x.parts.indexWhere({
+          case Path.Part.Field(name) => toRemove(name)
+          case _                     => false
+        })
+
+        Path.fromParts(x.parts.take(idx + 1))
+
+      })
+      .distinct
+      .map(path => { in: DataFrame =>
+        dropField(path, in)
+      })
+      .reduce(_ andThen _)
+
+    //out.printSchema()
+
+    //out.explain(true)
+
+    drop(out).write.mode(SaveMode.Overwrite).parquet("target/testOut")
 
   }
 
-  def dropField(path: Path, df: DataFrame): DataFrame = {
+  test("blank") {
 
-    val PathPart.Field(name) = path.last
+    loadModeleH.write.mode(SaveMode.Overwrite).parquet("target/testOut")
+  }
 
-    FlattenNestedTargeted.transformAtPath(path.init, {
-      case (st: StructType, expr) => StructExp(st.fieldNames.filter(_ != name).map(x => SingleExp(s"$expr.$x") -> x))
-    })(df)
+  test("rdd") {
+
+    loadModeleH.sparkSession
+      .createDataFrame(loadModeleH.rdd, loadModeleH.schema)
+      .write
+      .mode(SaveMode.Overwrite)
+      .parquet("target/testOut")
   }
 
   test("toto") {
@@ -142,10 +182,10 @@ class ModeleHTest extends FunSuite with SparkTest {
 
     def sizePath(path: Path): Int = {
 
-      1 + path
+      1 + path.parts
         .map({
-          case PathPart.Array => 2
-          case _              => 1
+          case Path.Part.Array => 2
+          case _               => 1
         })
         .sum
 

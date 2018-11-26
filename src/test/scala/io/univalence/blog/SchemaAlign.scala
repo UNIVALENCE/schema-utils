@@ -1,4 +1,4 @@
-package io.univalence.blob
+package io.univalence.blog
 import io.univalence.schemautils.{FlattenNestedTargeted, SparkTest}
 import org.apache.spark.sql.catalyst.encoders.ExpressionEncoder
 import org.apache.spark.sql.{Dataset, Encoder}
@@ -10,7 +10,7 @@ case class E(as: Seq[A], f: String)
 
 class SchemaAlign extends FunSuite with SparkTest {
 
-  test("blog article") {
+  ignore("blog article") {
 
     import ss.implicits._
 

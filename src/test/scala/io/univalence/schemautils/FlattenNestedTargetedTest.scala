@@ -1,6 +1,5 @@
 package io.univalence.schemautils
 
-import io.univalence.schemautils.FlattenNestedTargeted.{Path, PathPart}
 import org.apache.spark.sql.SaveMode
 import org.scalatest.FunSuiteLike
 

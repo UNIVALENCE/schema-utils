@@ -1,6 +1,5 @@
 package io.univalence.schemautils
 
-import io.univalence.schemautils.FlattenNestedTargeted.Path
 import org.scalatest.FunSpecLike
 
 class TransformAtPathTest extends FunSpecLike with SparkTest {
