@@ -3,15 +3,16 @@ import org.apache.spark.sql.{DataFrame, Dataset, Encoder, SparkSession}
 import org.scalatest.FunSuite
 
 import scala.util.Try
+/*
 
 class SparkSessionAndEncoder extends FunSuite {
 
-  test("Refactorer du code avec Spark") {
+  ignore("Refactorer du code avec Spark") {
 
     /*
 
     Parfois on veut refactorer du code avec Spark, et on finit assez rapidement par soit avoir une SparkSession en implicit
-     */
+ */
 
     {
       def superFonction(df: DataFrame)(implicit sparkSession: SparkSession): DataFrame = {
@@ -22,7 +23,7 @@ class SparkSessionAndEncoder extends FunSuite {
     /*
 
         Où on va se retrouver avec de la configuation en implicit partout
-     */
+ */
 
     def superFonction2(df: DataFrame)(implicit sparkSession: SparkSession,
                                       config: com.typesafe.config.Config): DataFrame = {
@@ -31,7 +32,7 @@ class SparkSessionAndEncoder extends FunSuite {
 
     /*
    d'un autre coté, lorsque l'on refactorise,  on se retrouve avec des erreurs d'implicit quand on rearrange le code pour reduire le niveau de duplication.
-     */
+ */
 
     /*
     def groupByKeyRemoveNull[A, K](dataset: Dataset[A])(f: A => Option[K]): Dataset[(K, Seq[A])] = {
@@ -40,17 +41,17 @@ class SparkSessionAndEncoder extends FunSuite {
         .groupByKey(_._1)
         .mapGroups({ case (k, it) => (k, it.map(_._2).toSeq) })
     }
-     */
+ */
 
     /*
     Error:(37, 17) Unable to find encoder for type (K, A). An implicit Encoder[(K, A)] is needed to store (K, A) instances in a Dataset. Primitive types (Int, String, etc) and Product types (case classes) are supported by importing spark.implicits._  Support for serializing other types will be added in future releases.
         .flatMap(x => f(x).map(y => (y, x)))
-     */
+ */
 
     /*
 
     1ère astuce : SparkSession est un membre de Dataframe/Dataset
-     */
+ */
     {
       def superFonction(df: DataFrame): DataFrame = {
         val ss = df.sparkSession
@@ -70,7 +71,7 @@ class SparkSessionAndEncoder extends FunSuite {
 
     Il peut être plus judicieux de faire une classe :
 
-     */
+ */
 
     {
       object MonJob {
@@ -89,7 +90,7 @@ class SparkSessionAndEncoder extends FunSuite {
 
 
 
-     */
+ */
     object X {
       case class MonJobConfig(config1: String, config2: Int)
 
@@ -104,13 +105,13 @@ class SparkSessionAndEncoder extends FunSuite {
 
     /*
       cela permet de valider la configuration du programme avant de démarrer les traitements (via MonJobConfig.fromConfig(...) qui renvoit un Try) et aussi de voir clairement quelle partie du programme utilise tel configuration. (alt+F7 sur IntelliJ, find usages)
-     */
+ */
 
     /*
     3 Il manque des encodeurs
 
     Quand vous allez vouloir générifier du code en spark, il va vous manquer des implicits. Contrairement aux erreurs d'implicit classiques qui consistent à importer ss.implicits._, ici il faut récupérer les implicits manquants.
-     */
+ */
 
     // Dans la denière version d'intelliJ, on peut voir les implicits "Show implicit hints"
 
@@ -125,7 +126,7 @@ class SparkSessionAndEncoder extends FunSuite {
     /*
 
     IntelliJ est assez clair sur ce qui manque quand les implicits sont visibles. On va ouvrir un troisième groupe d'argument pour les récupérer
-     */
+ */
 
     def groupByKeyRemoveNull[A, K](dataset: Dataset[A])(f: A => Option[K])(
         implicit encKA: Encoder[(K, A)],
@@ -144,3 +145,5 @@ class SparkSessionAndEncoder extends FunSuite {
 package com.typesafe.config {
   trait Config
 }
+
+ */

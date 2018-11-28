@@ -39,18 +39,13 @@ class ModeleHTest extends FunSuite with SparkTest {
 
   }
 
-  test("reproduce bug") {
+  ignore("reproduce bug") {
     dfFromJson({ "" })
 
   }
 
   def sizePath(path: Path): Int = {
-
-    path match {
-      case Path.Empty      => 1
-      case x: NonEmptyPath => x.fold[Int]((_, names, opt) => names.size + 1 + opt.getOrElse(1), _ + 2)
-    }
-
+    path.fold[Int](1, (_, names, opt) => names.size + 1 + opt, _ + 2)
   }
 
   ignore("remove history") {
@@ -156,12 +151,12 @@ class ModeleHTest extends FunSuite with SparkTest {
 
   }
 
-  test("blank") {
+  ignore("blank") {
 
     loadModeleH.write.mode(SaveMode.Overwrite).parquet("target/testOut")
   }
 
-  test("rdd") {
+  ignore("rdd") {
 
     loadModeleH.sparkSession
       .createDataFrame(loadModeleH.rdd, loadModeleH.schema)
@@ -170,7 +165,7 @@ class ModeleHTest extends FunSuite with SparkTest {
       .parquet("target/testOut")
   }
 
-  test("toto") {
+  ignore("toto") {
     val schema = fastLoadSchema()
 
     schema.printTreeString()

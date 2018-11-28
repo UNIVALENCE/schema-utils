@@ -29,7 +29,7 @@ class TransformAtPathTest extends FunSpecLike with SparkTest {
     }
 
     it("should increase a value nested in a struct and an array") {
-      val result = FlattenNestedTargeted.transformAtPath(Path.fromString("b.[].e"), (_, x) => SingleExp(s"$x + 1"))(df)
+      val result = FlattenNestedTargeted.transformAtPath(Path.select.b.>.e, (_, x) => SingleExp(s"$x + 1"))(df)
 
       assertDfEqual(
         result,

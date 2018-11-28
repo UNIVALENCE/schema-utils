@@ -13,3 +13,5 @@ javaOptions ++= Seq("-Xms512M", "-Xmx2048M", "-XX:+CMSClassUnloadingEnabled")
 testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-oD")
 
 wartremoverWarnings ++= Warts.all // or Warts.unsafe
+
+parallelExecution in Test := false

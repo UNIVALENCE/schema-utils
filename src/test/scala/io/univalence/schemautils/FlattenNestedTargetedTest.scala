@@ -52,7 +52,7 @@ class FlattenNestedTargetedTest extends SparkTest with FunSuiteLike {
     assertDfEqual(
       FlattenNestedTargeted.detach(
         in,
-        target      = Path.fromString("xxx.visites.[].recherches").asInstanceOf[Path.Field],
+        target      = Path.select.xxx.visites.>.recherches,
         fieldname   = _.mkString("_"),
         includeRoot = x => Some(("visite" +: x).mkString("_")),
         addLink     = true,
@@ -64,7 +64,7 @@ class FlattenNestedTargetedTest extends SparkTest with FunSuiteLike {
     assertDfEqual(
       FlattenNestedTargeted.detach(
         in,
-        target      = Path.fromString("xxx.visites.[].recherches").asInstanceOf[Path.Field],
+        target      = Path.select.xxx.visites.>.recherches,
         fieldname   = _.mkString("_"),
         includeRoot = x => Some(("visite" +: x).mkString("_")),
         addLink     = true,
@@ -197,7 +197,7 @@ class FlattenNestedTargetedTest extends SparkTest with FunSuiteLike {
 
     df.schema.json
 
-    FlattenNestedTargeted.allPaths(df.schema, Path.Empty).foreach(println)
+    FlattenNestedTargeted.allPaths(df.schema).foreach(println)
 
     import org.apache.spark.sql.functions._
     println(

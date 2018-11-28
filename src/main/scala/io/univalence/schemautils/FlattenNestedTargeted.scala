@@ -1,5 +1,6 @@
 package io.univalence.schemautils
 
+import io.univalence.schemautils.Path.NonEmptyPath
 import org.apache.spark.sql.types.{ArrayType, DataType, StructField, StructType}
 import org.apache.spark.sql.{DataFrame, SparkSession}
 
@@ -90,7 +91,11 @@ object FlattenNestedTargeted {
     out
   }
 
-  def allPaths(dataType: DataType, parent: Path = Path.Empty): Seq[Path] =
+  def allPaths(structType: StructType): Seq[NonEmptyPath] = {
+    structType.fields.flatMap(x => allPaths(x.dataType, Path.select.field(x.name)))
+  }
+
+  def allPaths(dataType: DataType, parent: NonEmptyPath): Seq[NonEmptyPath] =
     dataType match {
       case StructType(fields) =>
         fields.flatMap(x => allPaths(x.dataType, parent.select.field(x.name)))
@@ -101,12 +106,13 @@ object FlattenNestedTargeted {
   def dataTypeAtPath(target: Path, dataType: DataType): Try[DataType] = {
     target match {
       case Path.Empty => Try(dataType)
-      case nep: NonEmptyPath =>
+      case nep: Path.NonEmptyPath =>
         Try(
           nep.fold[DataType](
-            (name, names, opt) => {
+            dataType,
+            (name, names, dtp) => {
 
-              (name +: names).foldLeft(opt.getOrElse(dataType))((dt, name) => {
+              (name +: names).foldLeft(dtp)((dt, name) => {
                 val st = dt.asInstanceOf[StructType]
 
                 st.fields.find(_.name == name).get.dataType
@@ -200,16 +206,16 @@ object FlattenNestedTargeted {
 
   def detach(dataFrame: DataFrame,
              target: Path.Field,
-             fieldname: Seq[String]   => String,
+             fieldname: Seq[String] => String,
              includeRoot: Seq[String] => Option[String],
              addLink: Boolean = true,
              outer: Boolean   = true): DataFrame = {
     dataFrame.sparkSession.udf.register("offset_outer", offset_outer _)
     dataFrame.sparkSession.udf.register("offset", offset _)
 
-    val (scope, init) = target.parent.right.get.parent.asInstanceOf[Path.Field].directParent
+    val (scope, init) = target.parent.asInstanceOf[Path.Array].parent.asInstanceOf[Path.Field].directParent
 
-    val rest = target.name +: target.names
+    val rest = target.allNames
 
     transformAtPath(
       scope,
@@ -226,7 +232,7 @@ object FlattenNestedTargeted {
 
         val name: String = fieldname(rest)
 
-        val y = dataTypeAtPath(target.copy(parent = Left(Path.Empty)), x).get
+        val y = dataTypeAtPath(target.copy(parent = Path.Empty), x).get
           .asInstanceOf[ArrayType]
           .elementType
           .asInstanceOf[StructType]
