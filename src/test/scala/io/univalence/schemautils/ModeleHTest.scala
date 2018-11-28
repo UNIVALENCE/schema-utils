@@ -44,6 +44,15 @@ class ModeleHTest extends FunSuite with SparkTest {
 
   }
 
+  def sizePath(path: Path): Int = {
+
+    path match {
+      case Path.Empty      => 1
+      case x: NonEmptyPath => x.fold[Int]((_, names, opt) => names.size + 1 + opt.getOrElse(1), _ + 2)
+    }
+
+  }
+
   ignore("remove history") {
 
     import FlattenNestedTargeted._
@@ -53,7 +62,7 @@ class ModeleHTest extends FunSuite with SparkTest {
     val detachProduitsDisplay: Endo = in =>
       detach(
         dataFrame   = in,
-        target      = Path.fromString("visites.[].recherches.[].history.[].produitsDisplay"),
+        target      = Path.select.visites.>.recherches.>.history.>.produitsDisplay,
         fieldname   = _.mkString("_"),
         includeRoot = x => Some(("history" :: x.toList).mkString("_")),
         outer       = false
@@ -62,7 +71,7 @@ class ModeleHTest extends FunSuite with SparkTest {
     val suggestion: Endo = in =>
       detach(
         dataFrame   = in,
-        target      = Path.fromString("visites.[].recherches.[].history.[].suggestion"),
+        target      = Path.select.visites.>.recherches.>.history.>.suggestion,
         fieldname   = _.mkString("_"),
         includeRoot = x => Some(("history" :: x.toList).mkString("_")),
         outer       = false
@@ -71,7 +80,7 @@ class ModeleHTest extends FunSuite with SparkTest {
     val detachLrs1: Endo = in =>
       detach(
         dataFrame   = in,
-        target      = Path.fromString("visites.[].recherches.[].history.[].bandeaux.[].lrs"),
+        target      = Path.select.visites.>.recherches.>.history.>.bandeaux.>.lrs,
         fieldname   = _.mkString("_"),
         includeRoot = x => Some(("bandeau" :: x.toList).mkString("_")),
         outer       = false
@@ -80,7 +89,7 @@ class ModeleHTest extends FunSuite with SparkTest {
     val detachLrs2: Endo = in =>
       detach(
         dataFrame   = in,
-        target      = Path.fromString("visites.[].recherches.[].history.[].lrs"),
+        target      = Path.select.visites.>.recherches.>.history.>.lrs,
         fieldname   = _.mkString("_"),
         includeRoot = x => Some(("history" :: x.toList).mkString("_")),
         outer       = false
@@ -89,7 +98,7 @@ class ModeleHTest extends FunSuite with SparkTest {
     val detachRecherches: Endo = in =>
       detach(
         dataFrame   = in,
-        target      = Path.fromString("visites.[].recherches"),
+        target      = Path.select.visites.>.recherches,
         fieldname   = _.mkString("_"),
         includeRoot = x => Some(("visite" :: x.toList).mkString("_")),
         outer       = false
@@ -109,17 +118,6 @@ class ModeleHTest extends FunSuite with SparkTest {
 
     val out = tx(loadModeleH)
 
-    def sizePath(path: Path): Int = {
-
-      1 + path.parts
-        .map({
-          case Path.Part.Array => 2
-          case _               => 1
-        })
-        .sum
-
-    }
-
     //visites
     //history
     //bandeaux
@@ -130,23 +128,20 @@ class ModeleHTest extends FunSuite with SparkTest {
                                     "history_produitsDisplay_link",
                                     "history_produitsDisplay")
 
+    def select(path: Path): Option[Path.Field] = {
+      path match {
+        case Path.Empty         => None
+        case Path.Array(parent) => select(parent)
+        case f: Path.Field =>
+          val (path, name) = f.directParent
+          if (toRemove(name)) Some(f)
+          else select(path)
+      }
+    }
+
     val drop = FlattenNestedTargeted
       .allPaths(out.schema)
-      .filter(x =>
-        x.parts.exists({
-          case Path.Part.Field(name) => toRemove(name)
-          case _                     => false
-        }))
-      .map(x => {
-
-        val idx = x.parts.indexWhere({
-          case Path.Part.Field(name) => toRemove(name)
-          case _                     => false
-        })
-
-        Path.fromParts(x.parts.take(idx + 1))
-
-      })
+      .flatMap(select)
       .distinct
       .map(path => { in: DataFrame =>
         dropField(path, in)
@@ -179,17 +174,6 @@ class ModeleHTest extends FunSuite with SparkTest {
     val schema = fastLoadSchema()
 
     schema.printTreeString()
-
-    def sizePath(path: Path): Int = {
-
-      1 + path.parts
-        .map({
-          case Path.Part.Array => 2
-          case _               => 1
-        })
-        .sum
-
-    }
 
     //visites
     //history

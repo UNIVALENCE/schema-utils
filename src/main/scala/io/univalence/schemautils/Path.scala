@@ -1,98 +1,101 @@
 package io.univalence.schemautils
 
-import io.univalence.schemautils.Path.{Part, _impl}
+import scala.language.{dynamics, implicitConversions}
 
-import scala.language.dynamics
+case class Select[+T <: Path](path: T) extends Dynamic {
+  def field(name: String): Select[Path.Field] = {
+    path match {
+      case f: Path.Field   => Select(f.copy(names = f.names :+ name))
+      case arr: Path.Array => Select(Path.Field(name, Nil, Right(arr)))
+      case _               => Select(new Path.Field(name))
+    }
+  }
+
+  def selectDynamic(name: String): Select[Path.Field] = {
+    field(name)
+  }
+
+  def `>` : Select[Path.Array] = {
+    path match {
+      case x: NonEmptyPath => Select[Path.Array](Path.Array(x))
+      case _               => ???
+    }
+  }
+}
+
+/*
+case class Prefix(path: Path) {
+  def inField(name: String): Path = ???
+  def inArray: Path               = ???
+}
+ */
 
 sealed trait Path {
 
-  def prefix(name: String): Path
+//  def prefix: Prefix = Prefix(this)
 
   def asCode: String
-
-  def inArray: Path
-
-  def dsl: Path.Dsl
-
-  def parts: Seq[Part]
-
-  sealed trait Split {
-    def last: Option[(Path, Path.Part)]
-    def head: Option[(Path.Part, Path)]
-    def lastArray: Option[(Path, Path)]
-
-  }
-
-  def split: Split
+  def select: Select[Path] = Select(this)
 
 }
 
 object Path {
 
-  sealed trait Dsl extends Dynamic {
+  def select = Select(Path.Empty)
 
-    def `>` : Path with Dsl
-
-    def selectDynamic(name: String): Path with Dsl
+  def fromString(str: String): Path = {
+    str
+      .split("\\.")
+      .foldLeft[Path](Path.Empty)((p, s) =>
+        s match {
+          case "[]" | ">" => p.select.>
+          case _          => p.select.field(s)
+      })
   }
 
-  private case class _impl(parts: Seq[Part]) extends Path with Dsl {
-    override def asCode: String                             = parts.map({ case Part.Array => ">"; case Part.Field(name) => name }).mkString(".")
-    override def `>` : Path with Dsl                        = _impl(parts :+ Part.Array)
-    override def selectDynamic(name: String): Path with Dsl = _impl(parts :+ Part.Field(name))
-    override def prefix(name: String): Path                 = _impl(Part.Field(name) +: parts)
-    override def inArray: Path                              = _impl(Part.Array +: parts)
-    override def dsl: Dsl                                   = this
+  case class Field(name: String, names: Seq[String], parent: Either[Empty.type, Array]) extends NonEmptyPath {
+    override def asCode: String = parent.fold(_ => "", _.asCode + ".") + (name +: names).mkString(".")
 
-    object split extends Split {
-      def last: Option[(Path, Path.Part)] =
-        if (parts.nonEmpty) {
-          Some(_impl(parts.init) -> parts.last)
-        } else {
-          None
-        }
+    def this(name: String) = { this(name, Nil, Left(Empty)) }
 
-      def head: Option[(Path.Part, Path)] = {
-        if (parts.nonEmpty)
-          Some(parts.head -> _impl(parts.tail))
-        else
-          None
-      }
-      def lastArray: Option[(Path, Path)] =
-        parts.lastIndexOf(Path.Part.Array) match {
-          case -1 => None
-          case n =>
-            val (x, y) = parts.splitAt(n)
-            Some(_impl(x) -> _impl(y.drop(1)))
-        }
+    def directParent: (Path, String) = {
+      if (names.isEmpty)
+        parent.fold[Path](x => x, x => x) -> name
+      else
+        this.copy(names = names.init) -> names.last
+
     }
   }
 
-  sealed trait Part
-
-  final object Part {
-    final case class Field(name: String) extends Part
-    final case object Array              extends Part
+  case class Array(parent: NonEmptyPath) extends NonEmptyPath {
+    override def asCode: String = parent.asCode + ".>"
   }
 
-  val root: Path with Dsl = _impl(Vector.empty)
-
-  def fromString(str: String): Path = {
-    _impl(str.split('.').map({ case ">" | "[]" => Part.Array; case n => Part.Field(n) }))
+  case object Empty extends Path {
+    override def asCode: String = ""
   }
 
-  def fromParts(parts: Seq[Part]): Path = _impl(parts)
+  implicit def toPath1[T <: Path](select: Select[T]): T = select.path
 
+  type UnfoldedPath = Seq[Option[String]]
+
+  def unfold(path: Path): UnfoldedPath = {
+    path match {
+      case Path.Empty => Nil
+      case Path.Field(name, names, parent) =>
+        unfold(parent.fold[Path](identity, identity)) ++ (name +: names).map(Some.apply)
+      case Path.Array(parent) => unfold(parent) :+ None
+    }
+  }
 }
 
-object SmallApp {
+sealed trait NonEmptyPath extends Path {
 
-  def main(args: Array[String]): Unit = {
-
-    Path.root.a.>.b
-
-    println(Path.fromString("a.>.b").asCode)
-
+  def fold[B](field: (String, Seq[String], Option[B]) => B, array: B => B): B = {
+    this match {
+      case f: Path.Field => field(f.name, f.names, f.parent.fold(_ => None, x => Some(x.fold(field, array))))
+      case a: Path.Array => array(a.parent.fold(field, array))
+    }
   }
 
 }

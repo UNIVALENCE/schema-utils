@@ -52,7 +52,7 @@ class FlattenNestedTargetedTest extends SparkTest with FunSuiteLike {
     assertDfEqual(
       FlattenNestedTargeted.detach(
         in,
-        target      = Path.fromString("xxx.visites.[].recherches"),
+        target      = Path.fromString("xxx.visites.[].recherches").asInstanceOf[Path.Field],
         fieldname   = _.mkString("_"),
         includeRoot = x => Some(("visite" +: x).mkString("_")),
         addLink     = true,
@@ -64,7 +64,7 @@ class FlattenNestedTargetedTest extends SparkTest with FunSuiteLike {
     assertDfEqual(
       FlattenNestedTargeted.detach(
         in,
-        target      = Path.fromString("xxx.visites.[].recherches"),
+        target      = Path.fromString("xxx.visites.[].recherches").asInstanceOf[Path.Field],
         fieldname   = _.mkString("_"),
         includeRoot = x => Some(("visite" +: x).mkString("_")),
         addLink     = true,
@@ -101,7 +101,7 @@ class FlattenNestedTargetedTest extends SparkTest with FunSuiteLike {
     assertDfEqual(
       FlattenNestedTargeted.detach(
         in,
-        target      = Path.fromString("xxx.visites.[].recherches"),
+        target      = Path.select.xxx.visites.>.recherches,
         fieldname   = _.mkString("_"),
         includeRoot = x => Some(("visite" +: x).mkString("_")),
         addLink     = false,
@@ -128,7 +128,7 @@ class FlattenNestedTargetedTest extends SparkTest with FunSuiteLike {
 
     val res = FlattenNestedTargeted.detach(
       in,
-      target      = Path.fromString("visites.[].recherches.[].history"),
+      target      = Path.select.visites.>.recherches.>.history,
       fieldname   = _.mkString("_"),
       includeRoot = x => Some(("recherche" +: x).mkString("_")),
       addLink     = false,
@@ -164,7 +164,7 @@ class FlattenNestedTargetedTest extends SparkTest with FunSuiteLike {
     assertDfEqual(
       FlattenNestedTargeted.detach(
         in,
-        target      = Path.fromString("xxx.visites.[].recherches"),
+        target      = Path.select.xxx.visites.>.recherches,
         fieldname   = _.mkString("_"),
         includeRoot = x => Some(("visite" +: x).mkString("_")),
         addLink     = false,
@@ -197,7 +197,7 @@ class FlattenNestedTargetedTest extends SparkTest with FunSuiteLike {
 
     df.schema.json
 
-    FlattenNestedTargeted.allPaths(df.schema).foreach(println)
+    FlattenNestedTargeted.allPaths(df.schema, Path.Empty).foreach(println)
 
     import org.apache.spark.sql.functions._
     println(
@@ -235,10 +235,8 @@ class FlattenNestedTargetedTest extends SparkTest with FunSuiteLike {
                ]
              }""")
 
-    val out = FlattenNestedTargeted.detach(df,
-                                           Path.fromString("visites.[].recherches"),
-                                           _.mkString("_"),
-                                           x => Some(x.mkString("_")))
+    val out =
+      FlattenNestedTargeted.detach(df, Path.select.visites.>.recherches, _.mkString("_"), x => Some(x.mkString("_")))
 
     out.printSchema()
 
