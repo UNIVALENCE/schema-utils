@@ -2,9 +2,33 @@ package com.solocal.sudata
 
 import java.time.LocalDate
 
+import io.univalence.schemautils.SparkTest
+import org.apache.spark.sql.Row
+import org.apache.spark.sql.types.{DataType, StructType}
 import org.scalatest.FunSuite
 
-class TxModeleHBigQueryTest extends FunSuite {
+import scala.io.Source
+import scala.util.Try
+
+class TxModeleHBigQueryTest extends FunSuite with SparkTest{
+
+  def loadSchemaFromFile(): Try[StructType] = {
+    Try {
+      DataType.fromJson(Source.fromFile("schema.json").mkString).asInstanceOf[StructType]
+    }
+  }
+
+  test("test") {
+
+    val stub = ss.createDataFrame(ss.sparkContext.parallelize[Row](Nil,1), loadSchemaFromFile().get)
+
+    stub.printSchema()
+    println("-----")
+
+    TxModelh(stub).printSchema()
+
+  }
+
 
   test("testAllDaysBetween") {
 

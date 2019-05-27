@@ -30,7 +30,7 @@ object TxModelh {
     res1.select(colsRoot.map(expr): _*)
   }
 
-  val detachLrs: Endo = in =>
+  val detachLrs1: Endo = in =>
     detach(
       dataFrame = in,
       //TODO use typedpath
@@ -38,10 +38,20 @@ object TxModelh {
       target      = Path.select.recherches.>.history.>.bandeaux.>.lrs,
       fieldname   = _.mkString("_"),
       includeRoot = x => None,
-      outer       = false
+      outer       = true
   )
 
-  val detachHistory: Endo = in =>
+
+  //To put in filters in recherche
+  val toKeep = Seq("idRegroupementPage","idRequete","enabledFilters", "displayedFilters","enabledSorting")
+
+
+  //TODO : Drop recherches/lrs/numerocompte
+
+
+
+
+  val detachLrs2: Endo = in =>
     detach(
       dataFrame = in,
       //path"recherches/history"
@@ -106,8 +116,8 @@ object TxModelh {
 
   val tx: Endo = Seq[Endo](
     detachVisite,
-    detachLrs,
-    detachHistory,
+    detachLrs1,
+    detachLrs2,
     moveHistoryFields,
     dropRecherches,
     renameHistory,
