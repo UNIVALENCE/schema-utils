@@ -130,10 +130,13 @@ object TxModeleHBigQuery {
 
         loadModeleH.printSchema()
 
-        TxModelh
-          .tx(loadModeleH)
+        val out = TxModelh(loadModeleH)
+        println("--------- new Schema ------------")
+        out.printSchema()
+
+        out
           .write
-          .mode(SaveMode.Overwrite)
+          //.mode(SaveMode.Overwrite)
           .partitionBy("datasource", "no_event")
           .parquet(outDir)
 
