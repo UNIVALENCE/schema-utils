@@ -1,5 +1,7 @@
 package com.solocal.sudata
 
+import java.time.{Duration, LocalDate}
+
 import io.univalence.schemautils.FlattenNestedTargeted.{addFieldAtPath, detach, dropField, renameField, transformAtPath}
 import io.univalence.schemautils.{FlattenNestedTargeted, Path, SingleExp, StructExp}
 import org.apache.spark.sql.{DataFrame, SaveMode, SparkSession}
@@ -119,14 +121,20 @@ object TxModelh {
 
 object TxModeleHBigQuery {
 
+  def allDaysBetween(start: LocalDate, end: LocalDate): Seq[LocalDate] = {
+    val periode = Duration.between(start.atStartOfDay(), end.atStartOfDay())
+    (0L to periode.toDays).map(x => start.plusDays(x))
+  }
+
   def main(args: Array[String]): Unit = {
     args match {
-      case Array(baseDir, outDir) =>
-        val ss = SparkSession.builder().appName(this.getClass.getName).master("local[8]").getOrCreate()
+      case Array(baseDir, startday, endday, outDir) =>
+        val ss          = SparkSession.builder().appName(this.getClass.getName).master("local[8]").getOrCreate()
+        val allNoEvents = allDaysBetween(LocalDate.parse(startday), LocalDate.parse(endday)).mkString("{", ",", "}")
         val loadModeleH = ss.read
           .option("basePath", baseDir)
           .option("mergeSchema", "true")
-          .parquet(s"$baseDir/*/*/*.parquet")
+          .parquet(s"$baseDir/*/no_event=$allNoEvents/*.parquet")
 
         loadModeleH.printSchema()
 
@@ -134,9 +142,8 @@ object TxModeleHBigQuery {
         println("--------- new Schema ------------")
         out.printSchema()
 
-        out
-          .write
-          //.mode(SaveMode.Overwrite)
+        out.write
+        //.mode(SaveMode.Overwrite)
           .partitionBy("datasource", "no_event")
           .parquet(outDir)
 
