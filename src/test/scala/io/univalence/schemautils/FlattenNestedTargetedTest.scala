@@ -5,6 +5,69 @@ import org.scalatest.FunSuiteLike
 
 class FlattenNestedTargetedTest extends SparkTest with FunSuiteLike {
 
+  test("add sum-up") {
+
+    val in = dfFromJson("""
+             { idvisitor: 1,
+               xxx: {visites:  [
+                 {idvisite : 2, recherches: [{idrecherche:3}, {idrecherche:4}] },
+                 {idvisite: 3},
+                 {idvisite: 5, recherches: [{idrecherche:6}]},
+                 {idvisite: 7, recherches: []}
+               ] }
+             }""")
+
+    val out = dfFromJson("""
+   {
+  "idvisitor": 1,
+  "xxx": {
+    "visites": [
+      {
+        "idvisite": 2,
+        "recherches": [
+          {
+            "idrecherche": 3
+          },
+          {
+            "idrecherche": 4
+          }
+        ],
+        "nbrecherches": 2
+      },
+      {
+        "idvisite": 3,
+        "nbrecherches": -1
+      },
+      {
+        "idvisite": 5,
+        "recherches": [
+          {
+            "idrecherche": 6
+          }
+        ],
+        "nbrecherches": 1
+      },
+      {
+        "idvisite": 7,
+        "recherches": [],
+        "nbrecherches": 0
+      }
+    ]
+  }
+}
+    """)
+
+    val extraField: String => (SingleExp, String) = str => SingleExp(s"cardinality($str.recherches)") -> "nbrecherches"
+
+    import FlattenNestedTargeted._
+
+    //path"xxx.visites/"
+    val res = addFieldAtPath(Path.select.xxx.visites.>,
+                             (_, point) => (SingleExp(s"cardinality($point.recherches)"), "nbrecherches"))(in)
+
+    assertDfEqual(res, out)
+  }
+
   test("add_link") {
     val in = dfFromJson("""
              { idvisitor: 1,

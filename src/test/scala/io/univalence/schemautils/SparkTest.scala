@@ -10,9 +10,9 @@ trait SparkTest extends Assertions {
   val ss: SparkSession =
     SparkSession
       .builder()
-      .master("local")
+      .master("local[2]")
       .config("spark.default.parallelism", 1)
-      .config("spark.ui.enabled", value = true)
+      .config("spark.ui.enabled",true)
       .getOrCreate()
 
   def smallDs[T: Encoder: ClassTag](t: T*): Dataset[T] = {

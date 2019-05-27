@@ -5,7 +5,7 @@ import org.apache.spark.sql.types.{ArrayType, DataType, StructField, StructType}
 import org.apache.spark.sql.{DataFrame, SparkSession}
 
 import scala.language.dynamics
-import scala.util.{Success, Try}
+import scala.util.Try
 
 //uStateMonad
 case class State[S, A](run: S => (A, S)) {
@@ -173,7 +173,21 @@ object FlattenNestedTargeted {
     out
   }
 
-  def dropField(path: Path.Field, df: DataFrame): DataFrame = {
+  def renameField(path: Path.Field, newname: String)(df: DataFrame): DataFrame = {
+    val (xs, name) = path.directParent
+    transformAtPath(xs, {
+      case (st: StructType, point) =>
+        StructExp(st.fieldNames.map(x => {
+          (SingleExp(s"$point.$x"), if (name == x) {
+            newname
+          } else {
+            x
+          })
+        }))
+    })(df)
+  }
+
+  def dropField(path: Path.Field)(df: DataFrame): DataFrame = {
 
     val (xs, name) = path.directParent
 
@@ -204,9 +218,23 @@ object FlattenNestedTargeted {
     }*/
   }
 
+  def addFieldAtPath(target: Path, tx: (DataType, String) => (StrExp, String))(dataFrame: DataFrame): DataFrame = {
+    FlattenNestedTargeted.transformAtPath(
+      target,
+      (dt, str) => {
+        val (exp, name) = tx(dt, str)
+        StructExp(
+          dt.asInstanceOf[StructType]
+            .fields
+            .filter(_.name != name)
+            .map(x => SingleExp(s"$str.${x.name}") -> x.name) :+ (exp, name))
+      }
+    )(dataFrame)
+  }
+
   def detach(dataFrame: DataFrame,
              target: Path.Field,
-             fieldname: Seq[String] => String,
+             fieldname: Seq[String]   => String,
              includeRoot: Seq[String] => Option[String],
              addLink: Boolean = true,
              outer: Boolean   = true): DataFrame = {
@@ -228,7 +256,7 @@ object FlattenNestedTargeted {
 
         val all = x.fieldNames.filter(_ != target.name)
 
-        val xs = all.flatMap(name => includeRoot(name :: Nil).map(n => s"x.$name as $n")).mkString(",")
+        val xs: Array[String] = all.flatMap(name => includeRoot(name :: Nil).map(n => s"x.$name as $n"))
 
         val name: String = fieldname(rest)
 
@@ -237,7 +265,7 @@ object FlattenNestedTargeted {
           .elementType
           .asInstanceOf[StructType]
 
-        val ys = y.fieldNames.map(n => s"y.$n as $n").mkString(",")
+        val ys: Array[String] = y.fieldNames.map(n => s"y.$n as $n")
 
         val root_xs = all.map(name => s"x.$name as $name").mkString(", ")
 
@@ -261,11 +289,11 @@ object FlattenNestedTargeted {
               case n => SingleExp(s"$s.$n") -> n
             })
 
-        val empty_ys = y.fields.map(f => s"cast(null as ${f.dataType.catalogString}) as ${f.name}").mkString(", ")
+        val empty_ys: Array[String] = y.fields.map(f => s"cast(null as ${f.dataType.catalogString}) as ${f.name}")
 
-        val outer_array = s"array(struct($xs, $empty_ys))"
+        val outer_array = s"array(struct(${(xs ++ empty_ys).mkString(", ")}))"
 
-        val transform_x = s"""transform(x.$in, y -> struct($xs, $ys))"""
+        val transform_x = s"""transform(x.$in, y -> struct(${(xs ++ ys).mkString(", ")}))"""
 
         val txs: (StrExp, String) =
           SingleExp(
@@ -290,11 +318,4 @@ object FlattenNestedTargeted {
       }
     )(dataFrame)
   }
-
-  def apply(dataframe: DataFrame, target: Path, prefix: String): Try[DataFrame] = {
-    val ss = dataframe.sparkSession
-
-    ???
-  }
-
 }

@@ -1,0 +1,3738 @@
+{
+  "type" : "struct",
+  "fields" : [ {
+    "name" : "idVisitor",
+    "type" : "string",
+    "nullable" : true,
+    "metadata" : { }
+  }, {
+    "name" : "metierIdsVisitor",
+    "type" : {
+      "type" : "array",
+      "elementType" : "string",
+      "containsNull" : true
+    },
+    "nullable" : true,
+    "metadata" : { }
+  }, {
+    "name" : "isRobot",
+    "type" : "boolean",
+    "nullable" : true,
+    "metadata" : { }
+  }, {
+    "name" : "isAnonymous",
+    "type" : "boolean",
+    "nullable" : true,
+    "metadata" : { }
+  }, {
+    "name" : "typeSupport",
+    "type" : "string",
+    "nullable" : true,
+    "metadata" : { }
+  }, {
+    "name" : "appliDetail",
+    "type" : {
+      "type" : "struct",
+      "fields" : [ {
+        "name" : "idClient",
+        "type" : "string",
+        "nullable" : true,
+        "metadata" : { }
+      }, {
+        "name" : "versionClient",
+        "type" : "string",
+        "nullable" : true,
+        "metadata" : { }
+      }, {
+        "name" : "versionOS",
+        "type" : "string",
+        "nullable" : true,
+        "metadata" : { }
+      }, {
+        "name" : "typeOS",
+        "type" : "string",
+        "nullable" : true,
+        "metadata" : { }
+      } ]
+    },
+    "nullable" : true,
+    "metadata" : { }
+  }, {
+    "name" : "visites",
+    "type" : {
+      "type" : "array",
+      "elementType" : {
+        "type" : "struct",
+        "fields" : [ {
+          "name" : "idVisite",
+          "type" : "string",
+          "nullable" : true,
+          "metadata" : { }
+        }, {
+          "name" : "metierIdsVisite",
+          "type" : {
+            "type" : "array",
+            "elementType" : "string",
+            "containsNull" : true
+          },
+          "nullable" : true,
+          "metadata" : { }
+        }, {
+          "name" : "portail",
+          "type" : "string",
+          "nullable" : true,
+          "metadata" : { }
+        }, {
+          "name" : "isDirect",
+          "type" : "boolean",
+          "nullable" : true,
+          "metadata" : { }
+        }, {
+          "name" : "libSource",
+          "type" : "string",
+          "nullable" : true,
+          "metadata" : { }
+        }, {
+          "name" : "grpSource",
+          "type" : "string",
+          "nullable" : true,
+          "metadata" : { }
+        }, {
+          "name" : "noSource",
+          "type" : "string",
+          "nullable" : true,
+          "metadata" : { }
+        }, {
+          "name" : "liSource",
+          "type" : "string",
+          "nullable" : true,
+          "metadata" : { }
+        }, {
+          "name" : "noSourceDetail",
+          "type" : "string",
+          "nullable" : true,
+          "metadata" : { }
+        }, {
+          "name" : "liSourceDetail",
+          "type" : "string",
+          "nullable" : true,
+          "metadata" : { }
+        }, {
+          "name" : "commenceParAccueil",
+          "type" : "boolean",
+          "nullable" : true,
+          "metadata" : { }
+        }, {
+          "name" : "pageEntreeAt",
+          "type" : "string",
+          "nullable" : true,
+          "metadata" : { }
+        }, {
+          "name" : "robotDetectionLevel",
+          "type" : "integer",
+          "nullable" : true,
+          "metadata" : { }
+        }, {
+          "name" : "typeAccesVisite",
+          "type" : "string",
+          "nullable" : true,
+          "metadata" : { }
+        }, {
+          "name" : "typeClient",
+          "type" : "string",
+          "nullable" : true,
+          "metadata" : { }
+        }, {
+          "name" : "typeSource",
+          "type" : "string",
+          "nullable" : true,
+          "metadata" : { }
+        }, {
+          "name" : "userAgent",
+          "type" : "string",
+          "nullable" : true,
+          "metadata" : { }
+        }, {
+          "name" : "xtor",
+          "type" : "string",
+          "nullable" : true,
+          "metadata" : { }
+        }, {
+          "name" : "recherches",
+          "type" : {
+            "type" : "array",
+            "elementType" : {
+              "type" : "struct",
+              "fields" : [ {
+                "name" : "idRecherche",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "rep_passerelle",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "rep_univers",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "typereponse",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "typeRecherche",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "typeRechercheSec",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "typeRechercheSSA",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "typeRechercheAgg",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "modeRecherche",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "modeRechercheSec",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "modeRechercheSSA",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "typeOu",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "typeLoc",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "ouValeur",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "ouSaisi",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "analyseIdLieu",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "quoiQui",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "monoQuoiQui",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "monoQuoiQuiSaisi",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "an9Recherche",
+                "type" : {
+                  "type" : "array",
+                  "elementType" : {
+                    "type" : "struct",
+                    "fields" : [ {
+                      "name" : "codeAn9",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "libelleRubrique",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "libelleSegment",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "libelleVerticale",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "typeAchat",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "typeDensite",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    } ]
+                  },
+                  "containsNull" : true
+                },
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "an9AfficheEnrichi",
+                "type" : {
+                  "type" : "array",
+                  "elementType" : {
+                    "type" : "struct",
+                    "fields" : [ {
+                      "name" : "codeAn9",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "libelleRubrique",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "libelleSegment",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "libelleVerticale",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "typeAchat",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "typeDensite",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "uniforme",
+                      "type" : "double",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "bloc",
+                      "type" : "double",
+                      "nullable" : true,
+                      "metadata" : { }
+                    } ]
+                  },
+                  "containsNull" : true
+                },
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "an9Reponse",
+                "type" : {
+                  "type" : "array",
+                  "elementType" : {
+                    "type" : "struct",
+                    "fields" : [ {
+                      "name" : "codeAn9",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "libelleRubrique",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "libelleSegment",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "libelleVerticale",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "typeAchat",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "typeDensite",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "uniforme",
+                      "type" : "double",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "bloc",
+                      "type" : "double",
+                      "nullable" : true,
+                      "metadata" : { }
+                    } ]
+                  },
+                  "containsNull" : true
+                },
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "modeGeographique",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "isGeoloc",
+                "type" : "boolean",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "isProximite",
+                "type" : "boolean",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "codesLieuxBag",
+                "type" : {
+                  "type" : "array",
+                  "elementType" : {
+                    "type" : "struct",
+                    "fields" : [ {
+                      "name" : "libelle_ville",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "code_loc",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "insee_dpt",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "code_region",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "uniforme",
+                      "type" : "double",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "bloc",
+                      "type" : "double",
+                      "nullable" : true,
+                      "metadata" : { }
+                    } ]
+                  },
+                  "containsNull" : true
+                },
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "mnemoniqueSaisi",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "isCartoUsed",
+                "type" : "boolean",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "referrerDomain",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "horodate",
+                "type" : "timestamp",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "featureFlipping",
+                "type" : {
+                  "type" : "map",
+                  "keyType" : "string",
+                  "valueType" : "boolean",
+                  "valueContainsNull" : true
+                },
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "analyse_typesboost",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "termes",
+                "type" : {
+                  "type" : "array",
+                  "elementType" : {
+                    "type" : "struct",
+                    "fields" : [ {
+                      "name" : "value",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "champ",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "termType",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "id",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "uniforme",
+                      "type" : "double",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "bloc",
+                      "type" : "double",
+                      "nullable" : true,
+                      "metadata" : { }
+                    } ]
+                  },
+                  "containsNull" : true
+                },
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "motscles",
+                "type" : {
+                  "type" : "array",
+                  "elementType" : {
+                    "type" : "struct",
+                    "fields" : [ {
+                      "name" : "id",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "libelle",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "prix",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "monetise",
+                      "type" : "boolean",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "code_an8",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "id_cri",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "id_parent",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "categorie",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "type_cri",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "frequence_uni",
+                      "type" : "double",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "frequence_bloc",
+                      "type" : "double",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "nb_clic_reparti",
+                      "type" : "double",
+                      "nullable" : true,
+                      "metadata" : { }
+                    } ]
+                  },
+                  "containsNull" : true
+                },
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "motsclesAffiches",
+                "type" : {
+                  "type" : "array",
+                  "elementType" : {
+                    "type" : "struct",
+                    "fields" : [ {
+                      "name" : "id",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "libelle",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "prix",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "monetise",
+                      "type" : "boolean",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "code_an8",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "id_cri",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "id_parent",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "categorie",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "type_cri",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "frequence_uni",
+                      "type" : "double",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "frequence_bloc",
+                      "type" : "double",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "nb_clic_reparti",
+                      "type" : "double",
+                      "nullable" : true,
+                      "metadata" : { }
+                    } ]
+                  },
+                  "containsNull" : true
+                },
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "compteursMotsCles",
+                "type" : {
+                  "type" : "map",
+                  "keyType" : "string",
+                  "valueType" : "integer",
+                  "valueContainsNull" : true
+                },
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "cris",
+                "type" : {
+                  "type" : "array",
+                  "elementType" : {
+                    "type" : "struct",
+                    "fields" : [ {
+                      "name" : "typeCri",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "normale",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "brute",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "rubriques_fine",
+                      "type" : {
+                        "type" : "array",
+                        "elementType" : {
+                          "type" : "struct",
+                          "fields" : [ {
+                            "name" : "code_an8",
+                            "type" : "string",
+                            "nullable" : true,
+                            "metadata" : { }
+                          }, {
+                            "name" : "code_an9",
+                            "type" : "string",
+                            "nullable" : true,
+                            "metadata" : { }
+                          }, {
+                            "name" : "libelle",
+                            "type" : "string",
+                            "nullable" : true,
+                            "metadata" : { }
+                          } ]
+                        },
+                        "containsNull" : true
+                      },
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "uniforme",
+                      "type" : "double",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "bloc",
+                      "type" : "double",
+                      "nullable" : true,
+                      "metadata" : { }
+                    } ]
+                  },
+                  "containsNull" : true
+                },
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "crisAffiches",
+                "type" : {
+                  "type" : "array",
+                  "elementType" : {
+                    "type" : "struct",
+                    "fields" : [ {
+                      "name" : "typeCri",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "normale",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "brute",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "rubriques_fine",
+                      "type" : {
+                        "type" : "array",
+                        "elementType" : {
+                          "type" : "struct",
+                          "fields" : [ {
+                            "name" : "code_an8",
+                            "type" : "string",
+                            "nullable" : true,
+                            "metadata" : { }
+                          }, {
+                            "name" : "code_an9",
+                            "type" : "string",
+                            "nullable" : true,
+                            "metadata" : { }
+                          }, {
+                            "name" : "libelle",
+                            "type" : "string",
+                            "nullable" : true,
+                            "metadata" : { }
+                          } ]
+                        },
+                        "containsNull" : true
+                      },
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "uniforme",
+                      "type" : "double",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "bloc",
+                      "type" : "double",
+                      "nullable" : true,
+                      "metadata" : { }
+                    } ]
+                  },
+                  "containsNull" : true
+                },
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "rubriquesFinesAffichees",
+                "type" : {
+                  "type" : "array",
+                  "elementType" : {
+                    "type" : "struct",
+                    "fields" : [ {
+                      "name" : "codeAn9",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "libelle",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    } ]
+                  },
+                  "containsNull" : true
+                },
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "typeUV",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "debrayageUV",
+                "type" : "boolean",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "debrayageProximite",
+                "type" : "boolean",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "hasAt",
+                "type" : "boolean",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "typeAccesRecherche",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "autocomplete",
+                "type" : {
+                  "type" : "struct",
+                  "fields" : [ {
+                    "name" : "isUsedSurQuiQuoi",
+                    "type" : "boolean",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "typeChoixQuiQuoi",
+                    "type" : "string",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "nbCharSaisisQuiQuoi",
+                    "type" : "integer",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "isUsedSurOu",
+                    "type" : "boolean",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "isSolliciteeMono",
+                    "type" : "boolean",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "typeChoixOu",
+                    "type" : "string",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "nbCharSaisisOu",
+                    "type" : "integer",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "nbCharSaisisMono",
+                    "type" : "integer",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "historique_isUsedQuiQuoi",
+                    "type" : "boolean",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "historique_isUsedOu",
+                    "type" : "boolean",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "isSolliciteQuiQuoi",
+                    "type" : "boolean",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "isSolliciteOu",
+                    "type" : "boolean",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "quiQuoiSaisi",
+                    "type" : "string",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "ouSaisi",
+                    "type" : "string",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "idOu",
+                    "type" : "string",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "idQuiQuoi",
+                    "type" : "string",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "sourceOu",
+                    "type" : "string",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "sourceQuiQuoi",
+                    "type" : "string",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "sourceMono",
+                    "type" : "string",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "rangQuiQuoi",
+                    "type" : "integer",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "rangOu",
+                    "type" : "integer",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "rangMono",
+                    "type" : "integer",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "geo",
+                    "type" : "string",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "nbPropositionOuHisto",
+                    "type" : "integer",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "nbPropositionOuTop",
+                    "type" : "integer",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "nbPropositionQuiQuoiHisto",
+                    "type" : "integer",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "nbPropositionQuiQuoiTop",
+                    "type" : "integer",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "nbPropositionQuiQuoiGeo",
+                    "type" : "integer",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "nbPropositionMonoHisto",
+                    "type" : "integer",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "nbPropositionMonoTop",
+                    "type" : "integer",
+                    "nullable" : true,
+                    "metadata" : { }
+                  } ]
+                },
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "nbPagesAfficheesLR",
+                "type" : "integer",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "isRechercheCoupee",
+                "type" : "boolean",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "nbBlocsGratuits",
+                "type" : "integer",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "nbBlocsPayants",
+                "type" : "integer",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "nbBlocsLocaux",
+                "type" : "integer",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "nbBlocsExtraLocaux",
+                "type" : "integer",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "produitsPub",
+                "type" : {
+                  "type" : "array",
+                  "elementType" : {
+                    "type" : "struct",
+                    "fields" : [ {
+                      "name" : "codeProduit",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "nbOccur",
+                      "type" : "integer",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "nbClicsDedupl",
+                      "type" : "integer",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "nbClicsDupl",
+                      "type" : "integer",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "frequence_uni",
+                      "type" : "double",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "frequence_bloc",
+                      "type" : "double",
+                      "nullable" : true,
+                      "metadata" : { }
+                    } ]
+                  },
+                  "containsNull" : true
+                },
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "pushBonPlans",
+                "type" : {
+                  "type" : "array",
+                  "elementType" : {
+                    "type" : "struct",
+                    "fields" : [ {
+                      "name" : "raison_sociale",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "position",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "code_etablissement",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "code_produit",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "sous_type",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "numero_produit",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "affichage",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "vu",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "index_page",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "clics",
+                      "type" : {
+                        "type" : "array",
+                        "elementType" : {
+                          "type" : "struct",
+                          "fields" : [ {
+                            "name" : "coType",
+                            "type" : "string",
+                            "nullable" : true,
+                            "metadata" : { }
+                          }, {
+                            "name" : "codeTypeClic",
+                            "type" : "string",
+                            "nullable" : true,
+                            "metadata" : { }
+                          }, {
+                            "name" : "libelleTypeClic",
+                            "type" : "string",
+                            "nullable" : true,
+                            "metadata" : { }
+                          }, {
+                            "name" : "categorieLienBuc",
+                            "type" : "string",
+                            "nullable" : true,
+                            "metadata" : { }
+                          }, {
+                            "name" : "positionBloc",
+                            "type" : "integer",
+                            "nullable" : true,
+                            "metadata" : { }
+                          }, {
+                            "name" : "numProduit",
+                            "type" : "string",
+                            "nullable" : true,
+                            "metadata" : { }
+                          }, {
+                            "name" : "natureClic",
+                            "type" : "string",
+                            "nullable" : true,
+                            "metadata" : { }
+                          }, {
+                            "name" : "horodate",
+                            "type" : "timestamp",
+                            "nullable" : true,
+                            "metadata" : { }
+                          } ]
+                        },
+                        "containsNull" : true
+                      },
+                      "nullable" : true,
+                      "metadata" : { }
+                    } ]
+                  },
+                  "containsNull" : true
+                },
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "fdSeo",
+                "type" : {
+                  "type" : "array",
+                  "elementType" : {
+                    "type" : "struct",
+                    "fields" : [ {
+                      "name" : "bagNoCli",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "denomination",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "listeCodesAN9",
+                      "type" : {
+                        "type" : "array",
+                        "elementType" : "string",
+                        "containsNull" : true
+                      },
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "codeLocParution",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "idBloc",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "idBlocMieuxDisant",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "isProspect",
+                      "type" : "boolean",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "horodate",
+                      "type" : "timestamp",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "clics",
+                      "type" : {
+                        "type" : "array",
+                        "elementType" : {
+                          "type" : "struct",
+                          "fields" : [ {
+                            "name" : "coType",
+                            "type" : "string",
+                            "nullable" : true,
+                            "metadata" : { }
+                          }, {
+                            "name" : "codeTypeClic",
+                            "type" : "string",
+                            "nullable" : true,
+                            "metadata" : { }
+                          }, {
+                            "name" : "libelleTypeClic",
+                            "type" : "string",
+                            "nullable" : true,
+                            "metadata" : { }
+                          }, {
+                            "name" : "categorieLienBuc",
+                            "type" : "string",
+                            "nullable" : true,
+                            "metadata" : { }
+                          }, {
+                            "name" : "positionBloc",
+                            "type" : "integer",
+                            "nullable" : true,
+                            "metadata" : { }
+                          }, {
+                            "name" : "numProduit",
+                            "type" : "string",
+                            "nullable" : true,
+                            "metadata" : { }
+                          }, {
+                            "name" : "natureClic",
+                            "type" : "string",
+                            "nullable" : true,
+                            "metadata" : { }
+                          }, {
+                            "name" : "horodate",
+                            "type" : "timestamp",
+                            "nullable" : true,
+                            "metadata" : { }
+                          } ]
+                        },
+                        "containsNull" : true
+                      },
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "etablissements",
+                      "type" : {
+                        "type" : "array",
+                        "elementType" : "string",
+                        "containsNull" : true
+                      },
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "etablissementPrincipal",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "etablissementRestitution",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "produitpublicitaire",
+                      "type" : {
+                        "type" : "array",
+                        "elementType" : {
+                          "type" : "struct",
+                          "fields" : [ {
+                            "name" : "codeType",
+                            "type" : "string",
+                            "nullable" : true,
+                            "metadata" : { }
+                          }, {
+                            "name" : "codeProduit",
+                            "type" : "string",
+                            "nullable" : true,
+                            "metadata" : { }
+                          }, {
+                            "name" : "codeSousTypeProduit",
+                            "type" : "string",
+                            "nullable" : true,
+                            "metadata" : { }
+                          }, {
+                            "name" : "numeroProduit",
+                            "type" : "string",
+                            "nullable" : true,
+                            "metadata" : { }
+                          }, {
+                            "name" : "affichage",
+                            "type" : "string",
+                            "nullable" : true,
+                            "metadata" : { }
+                          }, {
+                            "name" : "vue",
+                            "type" : "string",
+                            "nullable" : true,
+                            "metadata" : { }
+                          } ]
+                        },
+                        "containsNull" : true
+                      },
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "produitpartenaire",
+                      "type" : {
+                        "type" : "array",
+                        "elementType" : "string",
+                        "containsNull" : true
+                      },
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "produitPublicitaireBP",
+                      "type" : {
+                        "type" : "array",
+                        "elementType" : {
+                          "type" : "struct",
+                          "fields" : [ {
+                            "name" : "code_etablissement",
+                            "type" : "string",
+                            "nullable" : true,
+                            "metadata" : { }
+                          }, {
+                            "name" : "code_produit",
+                            "type" : "string",
+                            "nullable" : true,
+                            "metadata" : { }
+                          }, {
+                            "name" : "sous_type",
+                            "type" : "string",
+                            "nullable" : true,
+                            "metadata" : { }
+                          }, {
+                            "name" : "numero_produit",
+                            "type" : "string",
+                            "nullable" : true,
+                            "metadata" : { }
+                          }, {
+                            "name" : "affichage",
+                            "type" : "string",
+                            "nullable" : true,
+                            "metadata" : { }
+                          }, {
+                            "name" : "vu",
+                            "type" : "string",
+                            "nullable" : true,
+                            "metadata" : { }
+                          } ]
+                        },
+                        "containsNull" : true
+                      },
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "origineFD",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "idRequete",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "isValidatedByAtInternet",
+                      "type" : "boolean",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "abTestings",
+                      "type" : {
+                        "type" : "array",
+                        "elementType" : {
+                          "type" : "struct",
+                          "fields" : [ {
+                            "name" : "experienceName",
+                            "type" : "string",
+                            "nullable" : true,
+                            "metadata" : { }
+                          }, {
+                            "name" : "varianteName",
+                            "type" : "string",
+                            "nullable" : true,
+                            "metadata" : { }
+                          } ]
+                        },
+                        "containsNull" : true
+                      },
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "fdType",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "url",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "previousPageUrl",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "numeroCompte",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    } ]
+                  },
+                  "containsNull" : true
+                },
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "varianteOGR",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "tracabiliteOGR",
+                "type" : {
+                  "type" : "array",
+                  "elementType" : {
+                    "type" : "struct",
+                    "fields" : [ {
+                      "name" : "cle",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "valeur",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    } ]
+                  },
+                  "containsNull" : true
+                },
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "rechercheXTOR",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "polePosition",
+                "type" : {
+                  "type" : "struct",
+                  "fields" : [ {
+                    "name" : "reqIdLieuPolePo",
+                    "type" : "string",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "reqListeActivitesPolePo",
+                    "type" : {
+                      "type" : "array",
+                      "elementType" : "string",
+                      "containsNull" : true
+                    },
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "reqPresencePolePo",
+                    "type" : "boolean",
+                    "nullable" : true,
+                    "metadata" : { }
+                  } ]
+                },
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "history",
+                "type" : {
+                  "type" : "array",
+                  "elementType" : {
+                    "type" : "struct",
+                    "fields" : [ {
+                      "name" : "idRegroupementPage",
+                      "type" : "integer",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "enabledFilters",
+                      "type" : {
+                        "type" : "array",
+                        "elementType" : {
+                          "type" : "struct",
+                          "fields" : [ {
+                            "name" : "filterId",
+                            "type" : "string",
+                            "nullable" : true,
+                            "metadata" : { }
+                          }, {
+                            "name" : "value",
+                            "type" : "string",
+                            "nullable" : true,
+                            "metadata" : { }
+                          }, {
+                            "name" : "libelle",
+                            "type" : "string",
+                            "nullable" : true,
+                            "metadata" : { }
+                          } ]
+                        },
+                        "containsNull" : true
+                      },
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "displayedFilters",
+                      "type" : {
+                        "type" : "array",
+                        "elementType" : {
+                          "type" : "struct",
+                          "fields" : [ {
+                            "name" : "filterId",
+                            "type" : "string",
+                            "nullable" : true,
+                            "metadata" : { }
+                          }, {
+                            "name" : "filterType",
+                            "type" : "string",
+                            "nullable" : true,
+                            "metadata" : { }
+                          }, {
+                            "name" : "libelle",
+                            "type" : "string",
+                            "nullable" : true,
+                            "metadata" : { }
+                          } ]
+                        },
+                        "containsNull" : true
+                      },
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "enabledSorting",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "idRequete",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "pagePrecId",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "isValidatedByAtInternet",
+                      "type" : "boolean",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "isFirst",
+                      "type" : "boolean",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "bandeaux",
+                      "type" : {
+                        "type" : "array",
+                        "elementType" : {
+                          "type" : "struct",
+                          "fields" : [ {
+                            "name" : "index",
+                            "type" : "integer",
+                            "nullable" : true,
+                            "metadata" : { }
+                          }, {
+                            "name" : "path",
+                            "type" : "string",
+                            "nullable" : true,
+                            "metadata" : { }
+                          }, {
+                            "name" : "nbreponses",
+                            "type" : "integer",
+                            "nullable" : true,
+                            "metadata" : { }
+                          }, {
+                            "name" : "lrs",
+                            "type" : {
+                              "type" : "array",
+                              "elementType" : {
+                                "type" : "struct",
+                                "fields" : [ {
+                                  "name" : "bagCodesAN9",
+                                  "type" : {
+                                    "type" : "array",
+                                    "elementType" : "string",
+                                    "containsNull" : true
+                                  },
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                }, {
+                                  "name" : "bagCodeLieu",
+                                  "type" : "string",
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                }, {
+                                  "name" : "blocDenom",
+                                  "type" : "string",
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                }, {
+                                  "name" : "blocDistance",
+                                  "type" : "string",
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                }, {
+                                  "name" : "blocId",
+                                  "type" : "string",
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                }, {
+                                  "name" : "blocLocal",
+                                  "type" : "string",
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                }, {
+                                  "name" : "blocNbInscriptions",
+                                  "type" : "string",
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                }, {
+                                  "name" : "blocNombreAvis",
+                                  "type" : "string",
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                }, {
+                                  "name" : "blocNote",
+                                  "type" : "string",
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                }, {
+                                  "name" : "blocNumeroClient",
+                                  "type" : "string",
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                }, {
+                                  "name" : "blocNumNat",
+                                  "type" : "string",
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                }, {
+                                  "name" : "blocPolePosition",
+                                  "type" : "string",
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                }, {
+                                  "name" : "blocPosition",
+                                  "type" : "integer",
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                }, {
+                                  "name" : "blocType",
+                                  "type" : "string",
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                }, {
+                                  "name" : "blocVu",
+                                  "type" : "boolean",
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                }, {
+                                  "name" : "blocInscriptionCarteVu",
+                                  "type" : "boolean",
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                }, {
+                                  "name" : "listeReponseType",
+                                  "type" : "string",
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                }, {
+                                  "name" : "rubriquesBlocCodeRubriques",
+                                  "type" : "string",
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                }, {
+                                  "name" : "blocHorodate",
+                                  "type" : "timestamp",
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                }, {
+                                  "name" : "blocIsProspet",
+                                  "type" : "boolean",
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                }, {
+                                  "name" : "blocNumOrdreBlocDansListeReponse",
+                                  "type" : "string",
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                }, {
+                                  "name" : "produitpublicitaire",
+                                  "type" : {
+                                    "type" : "array",
+                                    "elementType" : {
+                                      "type" : "struct",
+                                      "fields" : [ {
+                                        "name" : "codeType",
+                                        "type" : "string",
+                                        "nullable" : true,
+                                        "metadata" : { }
+                                      }, {
+                                        "name" : "codeProduit",
+                                        "type" : "string",
+                                        "nullable" : true,
+                                        "metadata" : { }
+                                      }, {
+                                        "name" : "codeSousTypeProduit",
+                                        "type" : "string",
+                                        "nullable" : true,
+                                        "metadata" : { }
+                                      }, {
+                                        "name" : "numeroProduit",
+                                        "type" : "string",
+                                        "nullable" : true,
+                                        "metadata" : { }
+                                      }, {
+                                        "name" : "affichage",
+                                        "type" : "string",
+                                        "nullable" : true,
+                                        "metadata" : { }
+                                      }, {
+                                        "name" : "vue",
+                                        "type" : "string",
+                                        "nullable" : true,
+                                        "metadata" : { }
+                                      } ]
+                                    },
+                                    "containsNull" : true
+                                  },
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                }, {
+                                  "name" : "produitpartenaire",
+                                  "type" : {
+                                    "type" : "array",
+                                    "elementType" : "string",
+                                    "containsNull" : true
+                                  },
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                }, {
+                                  "name" : "produitPublicitaireBP",
+                                  "type" : {
+                                    "type" : "array",
+                                    "elementType" : {
+                                      "type" : "struct",
+                                      "fields" : [ {
+                                        "name" : "code_etablissement",
+                                        "type" : "string",
+                                        "nullable" : true,
+                                        "metadata" : { }
+                                      }, {
+                                        "name" : "code_produit",
+                                        "type" : "string",
+                                        "nullable" : true,
+                                        "metadata" : { }
+                                      }, {
+                                        "name" : "sous_type",
+                                        "type" : "string",
+                                        "nullable" : true,
+                                        "metadata" : { }
+                                      }, {
+                                        "name" : "numero_produit",
+                                        "type" : "string",
+                                        "nullable" : true,
+                                        "metadata" : { }
+                                      }, {
+                                        "name" : "affichage",
+                                        "type" : "string",
+                                        "nullable" : true,
+                                        "metadata" : { }
+                                      }, {
+                                        "name" : "vu",
+                                        "type" : "string",
+                                        "nullable" : true,
+                                        "metadata" : { }
+                                      } ]
+                                    },
+                                    "containsNull" : true
+                                  },
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                }, {
+                                  "name" : "hasMc",
+                                  "type" : "boolean",
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                }, {
+                                  "name" : "motsCles",
+                                  "type" : {
+                                    "type" : "array",
+                                    "elementType" : "string",
+                                    "containsNull" : true
+                                  },
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                }, {
+                                  "name" : "cris",
+                                  "type" : {
+                                    "type" : "array",
+                                    "elementType" : "string",
+                                    "containsNull" : true
+                                  },
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                }, {
+                                  "name" : "etablissements",
+                                  "type" : {
+                                    "type" : "array",
+                                    "elementType" : "string",
+                                    "containsNull" : true
+                                  },
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                }, {
+                                  "name" : "etablissementPrincipal",
+                                  "type" : "string",
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                }, {
+                                  "name" : "etablissementRestitution",
+                                  "type" : "string",
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                }, {
+                                  "name" : "fd",
+                                  "type" : {
+                                    "type" : "array",
+                                    "elementType" : {
+                                      "type" : "struct",
+                                      "fields" : [ {
+                                        "name" : "bagNoCli",
+                                        "type" : "string",
+                                        "nullable" : true,
+                                        "metadata" : { }
+                                      }, {
+                                        "name" : "denomination",
+                                        "type" : "string",
+                                        "nullable" : true,
+                                        "metadata" : { }
+                                      }, {
+                                        "name" : "listeCodesAN9",
+                                        "type" : {
+                                          "type" : "array",
+                                          "elementType" : "string",
+                                          "containsNull" : true
+                                        },
+                                        "nullable" : true,
+                                        "metadata" : { }
+                                      }, {
+                                        "name" : "codeLocParution",
+                                        "type" : "string",
+                                        "nullable" : true,
+                                        "metadata" : { }
+                                      }, {
+                                        "name" : "idBloc",
+                                        "type" : "string",
+                                        "nullable" : true,
+                                        "metadata" : { }
+                                      }, {
+                                        "name" : "idBlocMieuxDisant",
+                                        "type" : "string",
+                                        "nullable" : true,
+                                        "metadata" : { }
+                                      }, {
+                                        "name" : "isProspect",
+                                        "type" : "boolean",
+                                        "nullable" : true,
+                                        "metadata" : { }
+                                      }, {
+                                        "name" : "horodate",
+                                        "type" : "timestamp",
+                                        "nullable" : true,
+                                        "metadata" : { }
+                                      }, {
+                                        "name" : "clics",
+                                        "type" : {
+                                          "type" : "array",
+                                          "elementType" : {
+                                            "type" : "struct",
+                                            "fields" : [ {
+                                              "name" : "coType",
+                                              "type" : "string",
+                                              "nullable" : true,
+                                              "metadata" : { }
+                                            }, {
+                                              "name" : "codeTypeClic",
+                                              "type" : "string",
+                                              "nullable" : true,
+                                              "metadata" : { }
+                                            }, {
+                                              "name" : "libelleTypeClic",
+                                              "type" : "string",
+                                              "nullable" : true,
+                                              "metadata" : { }
+                                            }, {
+                                              "name" : "categorieLienBuc",
+                                              "type" : "string",
+                                              "nullable" : true,
+                                              "metadata" : { }
+                                            }, {
+                                              "name" : "positionBloc",
+                                              "type" : "integer",
+                                              "nullable" : true,
+                                              "metadata" : { }
+                                            }, {
+                                              "name" : "numProduit",
+                                              "type" : "string",
+                                              "nullable" : true,
+                                              "metadata" : { }
+                                            }, {
+                                              "name" : "natureClic",
+                                              "type" : "string",
+                                              "nullable" : true,
+                                              "metadata" : { }
+                                            }, {
+                                              "name" : "horodate",
+                                              "type" : "timestamp",
+                                              "nullable" : true,
+                                              "metadata" : { }
+                                            } ]
+                                          },
+                                          "containsNull" : true
+                                        },
+                                        "nullable" : true,
+                                        "metadata" : { }
+                                      }, {
+                                        "name" : "etablissements",
+                                        "type" : {
+                                          "type" : "array",
+                                          "elementType" : "string",
+                                          "containsNull" : true
+                                        },
+                                        "nullable" : true,
+                                        "metadata" : { }
+                                      }, {
+                                        "name" : "etablissementPrincipal",
+                                        "type" : "string",
+                                        "nullable" : true,
+                                        "metadata" : { }
+                                      }, {
+                                        "name" : "etablissementRestitution",
+                                        "type" : "string",
+                                        "nullable" : true,
+                                        "metadata" : { }
+                                      }, {
+                                        "name" : "produitpublicitaire",
+                                        "type" : {
+                                          "type" : "array",
+                                          "elementType" : {
+                                            "type" : "struct",
+                                            "fields" : [ {
+                                              "name" : "codeType",
+                                              "type" : "string",
+                                              "nullable" : true,
+                                              "metadata" : { }
+                                            }, {
+                                              "name" : "codeProduit",
+                                              "type" : "string",
+                                              "nullable" : true,
+                                              "metadata" : { }
+                                            }, {
+                                              "name" : "codeSousTypeProduit",
+                                              "type" : "string",
+                                              "nullable" : true,
+                                              "metadata" : { }
+                                            }, {
+                                              "name" : "numeroProduit",
+                                              "type" : "string",
+                                              "nullable" : true,
+                                              "metadata" : { }
+                                            }, {
+                                              "name" : "affichage",
+                                              "type" : "string",
+                                              "nullable" : true,
+                                              "metadata" : { }
+                                            }, {
+                                              "name" : "vue",
+                                              "type" : "string",
+                                              "nullable" : true,
+                                              "metadata" : { }
+                                            } ]
+                                          },
+                                          "containsNull" : true
+                                        },
+                                        "nullable" : true,
+                                        "metadata" : { }
+                                      }, {
+                                        "name" : "produitpartenaire",
+                                        "type" : {
+                                          "type" : "array",
+                                          "elementType" : "string",
+                                          "containsNull" : true
+                                        },
+                                        "nullable" : true,
+                                        "metadata" : { }
+                                      }, {
+                                        "name" : "produitPublicitaireBP",
+                                        "type" : {
+                                          "type" : "array",
+                                          "elementType" : {
+                                            "type" : "struct",
+                                            "fields" : [ {
+                                              "name" : "code_etablissement",
+                                              "type" : "string",
+                                              "nullable" : true,
+                                              "metadata" : { }
+                                            }, {
+                                              "name" : "code_produit",
+                                              "type" : "string",
+                                              "nullable" : true,
+                                              "metadata" : { }
+                                            }, {
+                                              "name" : "sous_type",
+                                              "type" : "string",
+                                              "nullable" : true,
+                                              "metadata" : { }
+                                            }, {
+                                              "name" : "numero_produit",
+                                              "type" : "string",
+                                              "nullable" : true,
+                                              "metadata" : { }
+                                            }, {
+                                              "name" : "affichage",
+                                              "type" : "string",
+                                              "nullable" : true,
+                                              "metadata" : { }
+                                            }, {
+                                              "name" : "vu",
+                                              "type" : "string",
+                                              "nullable" : true,
+                                              "metadata" : { }
+                                            } ]
+                                          },
+                                          "containsNull" : true
+                                        },
+                                        "nullable" : true,
+                                        "metadata" : { }
+                                      }, {
+                                        "name" : "origineFD",
+                                        "type" : "string",
+                                        "nullable" : true,
+                                        "metadata" : { }
+                                      }, {
+                                        "name" : "idRequete",
+                                        "type" : "string",
+                                        "nullable" : true,
+                                        "metadata" : { }
+                                      }, {
+                                        "name" : "isValidatedByAtInternet",
+                                        "type" : "boolean",
+                                        "nullable" : true,
+                                        "metadata" : { }
+                                      }, {
+                                        "name" : "abTestings",
+                                        "type" : {
+                                          "type" : "array",
+                                          "elementType" : {
+                                            "type" : "struct",
+                                            "fields" : [ {
+                                              "name" : "experienceName",
+                                              "type" : "string",
+                                              "nullable" : true,
+                                              "metadata" : { }
+                                            }, {
+                                              "name" : "varianteName",
+                                              "type" : "string",
+                                              "nullable" : true,
+                                              "metadata" : { }
+                                            } ]
+                                          },
+                                          "containsNull" : true
+                                        },
+                                        "nullable" : true,
+                                        "metadata" : { }
+                                      }, {
+                                        "name" : "fdType",
+                                        "type" : "string",
+                                        "nullable" : true,
+                                        "metadata" : { }
+                                      }, {
+                                        "name" : "url",
+                                        "type" : "string",
+                                        "nullable" : true,
+                                        "metadata" : { }
+                                      }, {
+                                        "name" : "previousPageUrl",
+                                        "type" : "string",
+                                        "nullable" : true,
+                                        "metadata" : { }
+                                      }, {
+                                        "name" : "numeroCompte",
+                                        "type" : "string",
+                                        "nullable" : true,
+                                        "metadata" : { }
+                                      } ]
+                                    },
+                                    "containsNull" : true
+                                  },
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                }, {
+                                  "name" : "clics",
+                                  "type" : {
+                                    "type" : "array",
+                                    "elementType" : {
+                                      "type" : "struct",
+                                      "fields" : [ {
+                                        "name" : "coType",
+                                        "type" : "string",
+                                        "nullable" : true,
+                                        "metadata" : { }
+                                      }, {
+                                        "name" : "codeTypeClic",
+                                        "type" : "string",
+                                        "nullable" : true,
+                                        "metadata" : { }
+                                      }, {
+                                        "name" : "libelleTypeClic",
+                                        "type" : "string",
+                                        "nullable" : true,
+                                        "metadata" : { }
+                                      }, {
+                                        "name" : "categorieLienBuc",
+                                        "type" : "string",
+                                        "nullable" : true,
+                                        "metadata" : { }
+                                      }, {
+                                        "name" : "positionBloc",
+                                        "type" : "integer",
+                                        "nullable" : true,
+                                        "metadata" : { }
+                                      }, {
+                                        "name" : "numProduit",
+                                        "type" : "string",
+                                        "nullable" : true,
+                                        "metadata" : { }
+                                      }, {
+                                        "name" : "natureClic",
+                                        "type" : "string",
+                                        "nullable" : true,
+                                        "metadata" : { }
+                                      }, {
+                                        "name" : "horodate",
+                                        "type" : "timestamp",
+                                        "nullable" : true,
+                                        "metadata" : { }
+                                      } ]
+                                    },
+                                    "containsNull" : true
+                                  },
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                }, {
+                                  "name" : "scores",
+                                  "type" : {
+                                    "type" : "array",
+                                    "elementType" : {
+                                      "type" : "struct",
+                                      "fields" : [ {
+                                        "name" : "libelle",
+                                        "type" : "string",
+                                        "nullable" : true,
+                                        "metadata" : { }
+                                      }, {
+                                        "name" : "valeur",
+                                        "type" : "double",
+                                        "nullable" : true,
+                                        "metadata" : { }
+                                      } ]
+                                    },
+                                    "containsNull" : true
+                                  },
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                }, {
+                                  "name" : "isDoublon",
+                                  "type" : "boolean",
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                }, {
+                                  "name" : "listeIdBlocDoublons",
+                                  "type" : {
+                                    "type" : "array",
+                                    "elementType" : {
+                                      "type" : "struct",
+                                      "fields" : [ {
+                                        "name" : "blocCaches",
+                                        "type" : "string",
+                                        "nullable" : true,
+                                        "metadata" : { }
+                                      } ]
+                                    },
+                                    "containsNull" : true
+                                  },
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                }, {
+                                  "name" : "listeRubriquesDoublons",
+                                  "type" : {
+                                    "type" : "array",
+                                    "elementType" : {
+                                      "type" : "struct",
+                                      "fields" : [ {
+                                        "name" : "an9Caches",
+                                        "type" : "string",
+                                        "nullable" : true,
+                                        "metadata" : { }
+                                      }, {
+                                        "name" : "libelleCaches",
+                                        "type" : "string",
+                                        "nullable" : true,
+                                        "metadata" : { }
+                                      } ]
+                                    },
+                                    "containsNull" : true
+                                  },
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                }, {
+                                  "name" : "paramParutionPolePosition",
+                                  "type" : {
+                                    "type" : "struct",
+                                    "fields" : [ {
+                                      "name" : "idCampagne",
+                                      "type" : "string",
+                                      "nullable" : true,
+                                      "metadata" : { }
+                                    }, {
+                                      "name" : "rubriqueAn8",
+                                      "type" : {
+                                        "type" : "array",
+                                        "elementType" : "string",
+                                        "containsNull" : true
+                                      },
+                                      "nullable" : true,
+                                      "metadata" : { }
+                                    }, {
+                                      "name" : "lieu",
+                                      "type" : "string",
+                                      "nullable" : true,
+                                      "metadata" : { }
+                                    }, {
+                                      "name" : "tauxParution",
+                                      "type" : "integer",
+                                      "nullable" : true,
+                                      "metadata" : { }
+                                    } ]
+                                  },
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                }, {
+                                  "name" : "matchMotOrigine",
+                                  "type" : {
+                                    "type" : "array",
+                                    "elementType" : "string",
+                                    "containsNull" : true
+                                  },
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                }, {
+                                  "name" : "termes",
+                                  "type" : {
+                                    "type" : "array",
+                                    "elementType" : {
+                                      "type" : "struct",
+                                      "fields" : [ {
+                                        "name" : "value",
+                                        "type" : "string",
+                                        "nullable" : true,
+                                        "metadata" : { }
+                                      }, {
+                                        "name" : "champ",
+                                        "type" : "string",
+                                        "nullable" : true,
+                                        "metadata" : { }
+                                      }, {
+                                        "name" : "termType",
+                                        "type" : "string",
+                                        "nullable" : true,
+                                        "metadata" : { }
+                                      }, {
+                                        "name" : "id",
+                                        "type" : "string",
+                                        "nullable" : true,
+                                        "metadata" : { }
+                                      } ]
+                                    },
+                                    "containsNull" : true
+                                  },
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                } ]
+                              },
+                              "containsNull" : true
+                            },
+                            "nullable" : true,
+                            "metadata" : { }
+                          }, {
+                            "name" : "typeLR",
+                            "type" : "string",
+                            "nullable" : true,
+                            "metadata" : { }
+                          } ]
+                        },
+                        "containsNull" : true
+                      },
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "abTestings",
+                      "type" : {
+                        "type" : "array",
+                        "elementType" : {
+                          "type" : "struct",
+                          "fields" : [ {
+                            "name" : "experienceName",
+                            "type" : "string",
+                            "nullable" : true,
+                            "metadata" : { }
+                          }, {
+                            "name" : "varianteName",
+                            "type" : "string",
+                            "nullable" : true,
+                            "metadata" : { }
+                          } ]
+                        },
+                        "containsNull" : true
+                      },
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "produitsDisplay",
+                      "type" : {
+                        "type" : "array",
+                        "elementType" : {
+                          "type" : "struct",
+                          "fields" : [ {
+                            "name" : "idCampagne",
+                            "type" : "string",
+                            "nullable" : true,
+                            "metadata" : { }
+                          }, {
+                            "name" : "codeCampagne",
+                            "type" : "string",
+                            "nullable" : true,
+                            "metadata" : { }
+                          }, {
+                            "name" : "criteresParution",
+                            "type" : {
+                              "type" : "array",
+                              "elementType" : {
+                                "type" : "struct",
+                                "fields" : [ {
+                                  "name" : "id_lieu",
+                                  "type" : "string",
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                }, {
+                                  "name" : "denomination",
+                                  "type" : "string",
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                }, {
+                                  "name" : "code_marque",
+                                  "type" : "string",
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                }, {
+                                  "name" : "annonceur",
+                                  "type" : "string",
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                }, {
+                                  "name" : "zones_display",
+                                  "type" : {
+                                    "type" : "array",
+                                    "elementType" : "string",
+                                    "containsNull" : true
+                                  },
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                }, {
+                                  "name" : "thematiques",
+                                  "type" : {
+                                    "type" : "array",
+                                    "elementType" : "string",
+                                    "containsNull" : true
+                                  },
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                }, {
+                                  "name" : "repli",
+                                  "type" : "string",
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                } ]
+                              },
+                              "containsNull" : true
+                            },
+                            "nullable" : true,
+                            "metadata" : { }
+                          }, {
+                            "name" : "liensDisplay",
+                            "type" : {
+                              "type" : "array",
+                              "elementType" : {
+                                "type" : "struct",
+                                "fields" : [ {
+                                  "name" : "uri",
+                                  "type" : "string",
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                }, {
+                                  "name" : "label",
+                                  "type" : "string",
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                }, {
+                                  "name" : "type_lien",
+                                  "type" : "string",
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                } ]
+                              },
+                              "containsNull" : true
+                            },
+                            "nullable" : true,
+                            "metadata" : { }
+                          }, {
+                            "name" : "clicsDisplay",
+                            "type" : {
+                              "type" : "array",
+                              "elementType" : {
+                                "type" : "struct",
+                                "fields" : [ {
+                                  "name" : "coType",
+                                  "type" : "string",
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                }, {
+                                  "name" : "codeTypeClic",
+                                  "type" : "string",
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                }, {
+                                  "name" : "libelleTypeClic",
+                                  "type" : "string",
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                }, {
+                                  "name" : "categorieLienBuc",
+                                  "type" : "string",
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                }, {
+                                  "name" : "positionBloc",
+                                  "type" : "integer",
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                }, {
+                                  "name" : "numProduit",
+                                  "type" : "string",
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                }, {
+                                  "name" : "natureClic",
+                                  "type" : "string",
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                }, {
+                                  "name" : "horodate",
+                                  "type" : "timestamp",
+                                  "nullable" : true,
+                                  "metadata" : { }
+                                } ]
+                              },
+                              "containsNull" : true
+                            },
+                            "nullable" : true,
+                            "metadata" : { }
+                          } ]
+                        },
+                        "containsNull" : true
+                      },
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "url",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "previousPageUrl",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "numeroCompte",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "suggestion",
+                      "type" : {
+                        "type" : "array",
+                        "elementType" : {
+                          "type" : "struct",
+                          "fields" : [ {
+                            "name" : "sug_type",
+                            "type" : "string",
+                            "nullable" : true,
+                            "metadata" : { }
+                          }, {
+                            "name" : "sug_quiquoi",
+                            "type" : "string",
+                            "nullable" : true,
+                            "metadata" : { }
+                          }, {
+                            "name" : "sug_ou",
+                            "type" : {
+                              "type" : "struct",
+                              "fields" : [ {
+                                "name" : "id_lieu",
+                                "type" : "string",
+                                "nullable" : true,
+                                "metadata" : { }
+                              }, {
+                                "name" : "coordonnees",
+                                "type" : {
+                                  "type" : "array",
+                                  "elementType" : "double",
+                                  "containsNull" : true
+                                },
+                                "nullable" : true,
+                                "metadata" : { }
+                              }, {
+                                "name" : "rayon",
+                                "type" : "integer",
+                                "nullable" : true,
+                                "metadata" : { }
+                              } ]
+                            },
+                            "nullable" : true,
+                            "metadata" : { }
+                          } ]
+                        },
+                        "containsNull" : true
+                      },
+                      "nullable" : true,
+                      "metadata" : { }
+                    } ]
+                  },
+                  "containsNull" : true
+                },
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "kpis",
+                "type" : {
+                  "type" : "struct",
+                  "fields" : [ {
+                    "name" : "ndcg1",
+                    "type" : "double",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "ndcg2",
+                    "type" : "double",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "ndcg3",
+                    "type" : "double",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "ndcg4",
+                    "type" : "double",
+                    "nullable" : true,
+                    "metadata" : { }
+                  } ]
+                },
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "visiteurPositionLongitude",
+                "type" : "double",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "visiteurPositionLatitude",
+                "type" : "double",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "recherchePositionLongitude",
+                "type" : "double",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "recherchePositionLatitude",
+                "type" : "double",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "flagDatadome",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "apiPartenaire",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "apiPartenaireDetail",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "isSensible",
+                "type" : "boolean",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "requete",
+                "type" : {
+                  "type" : "struct",
+                  "fields" : [ {
+                    "name" : "req_ouogr",
+                    "type" : {
+                      "type" : "struct",
+                      "fields" : [ {
+                        "name" : "id_lieu",
+                        "type" : "string",
+                        "nullable" : true,
+                        "metadata" : { }
+                      }, {
+                        "name" : "nom",
+                        "type" : "string",
+                        "nullable" : true,
+                        "metadata" : { }
+                      }, {
+                        "name" : "proximite",
+                        "type" : "boolean",
+                        "nullable" : true,
+                        "metadata" : { }
+                      }, {
+                        "name" : "zone",
+                        "type" : {
+                          "type" : "struct",
+                          "fields" : [ {
+                            "name" : "coordinates",
+                            "type" : {
+                              "type" : "struct",
+                              "fields" : [ {
+                                "name" : "x",
+                                "type" : "double",
+                                "nullable" : true,
+                                "metadata" : { }
+                              }, {
+                                "name" : "y",
+                                "type" : "double",
+                                "nullable" : true,
+                                "metadata" : { }
+                              } ]
+                            },
+                            "nullable" : true,
+                            "metadata" : { }
+                          }, {
+                            "name" : "rayon",
+                            "type" : "integer",
+                            "nullable" : true,
+                            "metadata" : { }
+                          }, {
+                            "name" : "type",
+                            "type" : "string",
+                            "nullable" : true,
+                            "metadata" : { }
+                          } ]
+                        },
+                        "nullable" : true,
+                        "metadata" : { }
+                      } ]
+                    },
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "req_quiquoiogr",
+                    "type" : {
+                      "type" : "struct",
+                      "fields" : [ {
+                        "name" : "levee_ambiguite",
+                        "type" : "boolean",
+                        "nullable" : true,
+                        "metadata" : { }
+                      }, {
+                        "name" : "terme",
+                        "type" : "string",
+                        "nullable" : true,
+                        "metadata" : { }
+                      } ]
+                    },
+                    "nullable" : true,
+                    "metadata" : { }
+                  } ]
+                },
+                "nullable" : true,
+                "metadata" : { }
+              } ]
+            },
+            "containsNull" : true
+          },
+          "nullable" : true,
+          "metadata" : { }
+        }, {
+          "name" : "pagesAccueil",
+          "type" : {
+            "type" : "array",
+            "elementType" : {
+              "type" : "struct",
+              "fields" : [ {
+                "name" : "idRequete",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "produitDisplay",
+                "type" : {
+                  "type" : "struct",
+                  "fields" : [ {
+                    "name" : "idCampagne",
+                    "type" : "string",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "codeCampagne",
+                    "type" : "string",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "criteresParution",
+                    "type" : {
+                      "type" : "array",
+                      "elementType" : {
+                        "type" : "struct",
+                        "fields" : [ {
+                          "name" : "id_lieu",
+                          "type" : "string",
+                          "nullable" : true,
+                          "metadata" : { }
+                        }, {
+                          "name" : "denomination",
+                          "type" : "string",
+                          "nullable" : true,
+                          "metadata" : { }
+                        }, {
+                          "name" : "code_marque",
+                          "type" : "string",
+                          "nullable" : true,
+                          "metadata" : { }
+                        }, {
+                          "name" : "annonceur",
+                          "type" : "string",
+                          "nullable" : true,
+                          "metadata" : { }
+                        }, {
+                          "name" : "zones_display",
+                          "type" : {
+                            "type" : "array",
+                            "elementType" : "string",
+                            "containsNull" : true
+                          },
+                          "nullable" : true,
+                          "metadata" : { }
+                        }, {
+                          "name" : "thematiques",
+                          "type" : {
+                            "type" : "array",
+                            "elementType" : "string",
+                            "containsNull" : true
+                          },
+                          "nullable" : true,
+                          "metadata" : { }
+                        }, {
+                          "name" : "repli",
+                          "type" : "string",
+                          "nullable" : true,
+                          "metadata" : { }
+                        } ]
+                      },
+                      "containsNull" : true
+                    },
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "liensDisplay",
+                    "type" : {
+                      "type" : "array",
+                      "elementType" : {
+                        "type" : "struct",
+                        "fields" : [ {
+                          "name" : "uri",
+                          "type" : "string",
+                          "nullable" : true,
+                          "metadata" : { }
+                        }, {
+                          "name" : "label",
+                          "type" : "string",
+                          "nullable" : true,
+                          "metadata" : { }
+                        }, {
+                          "name" : "type_lien",
+                          "type" : "string",
+                          "nullable" : true,
+                          "metadata" : { }
+                        } ]
+                      },
+                      "containsNull" : true
+                    },
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "clicsDisplay",
+                    "type" : {
+                      "type" : "array",
+                      "elementType" : {
+                        "type" : "struct",
+                        "fields" : [ {
+                          "name" : "coType",
+                          "type" : "string",
+                          "nullable" : true,
+                          "metadata" : { }
+                        }, {
+                          "name" : "codeTypeClic",
+                          "type" : "string",
+                          "nullable" : true,
+                          "metadata" : { }
+                        }, {
+                          "name" : "libelleTypeClic",
+                          "type" : "string",
+                          "nullable" : true,
+                          "metadata" : { }
+                        }, {
+                          "name" : "categorieLienBuc",
+                          "type" : "string",
+                          "nullable" : true,
+                          "metadata" : { }
+                        }, {
+                          "name" : "positionBloc",
+                          "type" : "integer",
+                          "nullable" : true,
+                          "metadata" : { }
+                        }, {
+                          "name" : "numProduit",
+                          "type" : "string",
+                          "nullable" : true,
+                          "metadata" : { }
+                        }, {
+                          "name" : "natureClic",
+                          "type" : "string",
+                          "nullable" : true,
+                          "metadata" : { }
+                        }, {
+                          "name" : "horodate",
+                          "type" : "timestamp",
+                          "nullable" : true,
+                          "metadata" : { }
+                        } ]
+                      },
+                      "containsNull" : true
+                    },
+                    "nullable" : true,
+                    "metadata" : { }
+                  } ]
+                },
+                "nullable" : true,
+                "metadata" : { }
+              } ]
+            },
+            "containsNull" : true
+          },
+          "nullable" : true,
+          "metadata" : { }
+        }, {
+          "name" : "pagesAT",
+          "type" : {
+            "type" : "array",
+            "elementType" : {
+              "type" : "struct",
+              "fields" : [ {
+                "name" : "posPage",
+                "type" : "integer",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "page",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "dureePage",
+                "type" : "integer",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "chapitre1",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "chapitre2",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "chapitre3",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "temps",
+                "type" : "integer",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "dernierePage",
+                "type" : "boolean",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "siteN2",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "indicateursGlobaux",
+                "type" : {
+                  "type" : "struct",
+                  "fields" : [ {
+                    "name" : "idVersion",
+                    "type" : "integer",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "x1",
+                    "type" : "string",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "x2",
+                    "type" : "string",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "x3",
+                    "type" : "string",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "x4",
+                    "type" : "string",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "x5",
+                    "type" : "string",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "x6",
+                    "type" : "string",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "x7",
+                    "type" : "string",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "x8",
+                    "type" : "string",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "x9",
+                    "type" : "string",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "x10",
+                    "type" : "string",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "x11",
+                    "type" : "string",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "x12",
+                    "type" : "string",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "x13",
+                    "type" : "string",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "x14",
+                    "type" : "string",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "x15",
+                    "type" : "string",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "x16",
+                    "type" : "string",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "x17",
+                    "type" : "string",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "x18",
+                    "type" : "string",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "x19",
+                    "type" : "string",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "x20",
+                    "type" : "string",
+                    "nullable" : true,
+                    "metadata" : { }
+                  } ]
+                },
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "indicateursPage",
+                "type" : {
+                  "type" : "struct",
+                  "fields" : [ {
+                    "name" : "idVersion",
+                    "type" : "integer",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "f1",
+                    "type" : "string",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "f2",
+                    "type" : "string",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "f3",
+                    "type" : "string",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "f4",
+                    "type" : "string",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "f5",
+                    "type" : "string",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "f6",
+                    "type" : "string",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "f7",
+                    "type" : "string",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "f8",
+                    "type" : "string",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "f9",
+                    "type" : "string",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "f10",
+                    "type" : "string",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "f11",
+                    "type" : "string",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "f12",
+                    "type" : "string",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "f13",
+                    "type" : "string",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "f14",
+                    "type" : "string",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "f15",
+                    "type" : "string",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "f16",
+                    "type" : "string",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "f17",
+                    "type" : "string",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "f18",
+                    "type" : "string",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "f19",
+                    "type" : "string",
+                    "nullable" : true,
+                    "metadata" : { }
+                  }, {
+                    "name" : "f20",
+                    "type" : "string",
+                    "nullable" : true,
+                    "metadata" : { }
+                  } ]
+                },
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "clics",
+                "type" : {
+                  "type" : "array",
+                  "elementType" : {
+                    "type" : "struct",
+                    "fields" : [ {
+                      "name" : "siteN2",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "posHit",
+                      "type" : "integer",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "temps",
+                      "type" : "integer",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "clic",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "chapitre1",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "chapitre2",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "chapitre3",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    }, {
+                      "name" : "typeClic",
+                      "type" : "string",
+                      "nullable" : true,
+                      "metadata" : { }
+                    } ]
+                  },
+                  "containsNull" : true
+                },
+                "nullable" : true,
+                "metadata" : { }
+              } ]
+            },
+            "containsNull" : true
+          },
+          "nullable" : true,
+          "metadata" : { }
+        }, {
+          "name" : "sourcesAT",
+          "type" : {
+            "type" : "array",
+            "elementType" : {
+              "type" : "struct",
+              "fields" : [ {
+                "name" : "posHit",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "clic",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "typeSource",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "xto",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "typeAffluent",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "affluent",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "motClef",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "typeS",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "affiliateTypes",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "customOrganicSourcesGroups",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              } ]
+            },
+            "containsNull" : true
+          },
+          "nullable" : true,
+          "metadata" : { }
+        }, {
+          "name" : "at",
+          "type" : {
+            "type" : "struct",
+            "fields" : [ {
+              "name" : "idRecord",
+              "type" : "string",
+              "nullable" : true,
+              "metadata" : { }
+            }, {
+              "name" : "idVisite",
+              "type" : "string",
+              "nullable" : true,
+              "metadata" : { }
+            }, {
+              "name" : "idSite",
+              "type" : "string",
+              "nullable" : true,
+              "metadata" : { }
+            }, {
+              "name" : "typeSite",
+              "type" : "string",
+              "nullable" : true,
+              "metadata" : { }
+            }, {
+              "name" : "heure",
+              "type" : "string",
+              "nullable" : true,
+              "metadata" : { }
+            }, {
+              "name" : "heureLoc",
+              "type" : "string",
+              "nullable" : true,
+              "metadata" : { }
+            }, {
+              "name" : "navigateur",
+              "type" : "string",
+              "nullable" : true,
+              "metadata" : { }
+            }, {
+              "name" : "os",
+              "type" : "string",
+              "nullable" : true,
+              "metadata" : { }
+            }, {
+              "name" : "resolution",
+              "type" : "string",
+              "nullable" : true,
+              "metadata" : { }
+            }, {
+              "name" : "pays",
+              "type" : "string",
+              "nullable" : true,
+              "metadata" : { }
+            }, {
+              "name" : "region",
+              "type" : "string",
+              "nullable" : true,
+              "metadata" : { }
+            }, {
+              "name" : "ville",
+              "type" : "string",
+              "nullable" : true,
+              "metadata" : { }
+            }, {
+              "name" : "isp",
+              "type" : "string",
+              "nullable" : true,
+              "metadata" : { }
+            }, {
+              "name" : "nbPages",
+              "type" : "string",
+              "nullable" : true,
+              "metadata" : { }
+            }, {
+              "name" : "dureeVisite",
+              "type" : "string",
+              "nullable" : true,
+              "metadata" : { }
+            }, {
+              "name" : "pagesEntree",
+              "type" : "string",
+              "nullable" : true,
+              "metadata" : { }
+            }, {
+              "name" : "pageSortie",
+              "type" : "string",
+              "nullable" : true,
+              "metadata" : { }
+            }, {
+              "name" : "di",
+              "type" : "string",
+              "nullable" : true,
+              "metadata" : { }
+            }, {
+              "name" : "isVisiteT",
+              "type" : "string",
+              "nullable" : true,
+              "metadata" : { }
+            }, {
+              "name" : "idCorrelation2",
+              "type" : "string",
+              "nullable" : true,
+              "metadata" : { }
+            }, {
+              "name" : "idCorrelation5",
+              "type" : "string",
+              "nullable" : true,
+              "metadata" : { }
+            }, {
+              "name" : "idCorrelation6",
+              "type" : "string",
+              "nullable" : true,
+              "metadata" : { }
+            }, {
+              "name" : "idCorrelation7",
+              "type" : "string",
+              "nullable" : true,
+              "metadata" : { }
+            }, {
+              "name" : "idCorrelation8",
+              "type" : "string",
+              "nullable" : true,
+              "metadata" : { }
+            }, {
+              "name" : "idCorrelation9",
+              "type" : "string",
+              "nullable" : true,
+              "metadata" : { }
+            }, {
+              "name" : "idCorrelation10",
+              "type" : "string",
+              "nullable" : true,
+              "metadata" : { }
+            }, {
+              "name" : "marqueMobile",
+              "type" : "string",
+              "nullable" : true,
+              "metadata" : { }
+            }, {
+              "name" : "modeleMobile",
+              "type" : "string",
+              "nullable" : true,
+              "metadata" : { }
+            }, {
+              "name" : "javascript",
+              "type" : "string",
+              "nullable" : true,
+              "metadata" : { }
+            }, {
+              "name" : "chapitreEntree",
+              "type" : "string",
+              "nullable" : true,
+              "metadata" : { }
+            }, {
+              "name" : "entreeN2",
+              "type" : "string",
+              "nullable" : true,
+              "metadata" : { }
+            }, {
+              "name" : "chapitreSortie",
+              "type" : "string",
+              "nullable" : true,
+              "metadata" : { }
+            }, {
+              "name" : "sortieN2",
+              "type" : "string",
+              "nullable" : true,
+              "metadata" : { }
+            }, {
+              "name" : "support",
+              "type" : "string",
+              "nullable" : true,
+              "metadata" : { }
+            }, {
+              "name" : "typeVisite",
+              "type" : "string",
+              "nullable" : true,
+              "metadata" : { }
+            }, {
+              "name" : "numerosComptes",
+              "type" : {
+                "type" : "array",
+                "elementType" : "string",
+                "containsNull" : true
+              },
+              "nullable" : true,
+              "metadata" : { }
+            } ]
+          },
+          "nullable" : true,
+          "metadata" : { }
+        }, {
+          "name" : "tauxMatching",
+          "type" : "double",
+          "nullable" : true,
+          "metadata" : { }
+        }, {
+          "name" : "publisherAT",
+          "type" : {
+            "type" : "array",
+            "elementType" : {
+              "type" : "struct",
+              "fields" : [ {
+                "name" : "campagne",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "creation",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "variante",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "format",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "annonceurs",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "emplacementsGeneraux",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "emplacements",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "nbClics",
+                "type" : "integer",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "nbImpressions",
+                "type" : "integer",
+                "nullable" : true,
+                "metadata" : { }
+              } ]
+            },
+            "containsNull" : true
+          },
+          "nullable" : true,
+          "metadata" : { }
+        }, {
+          "name" : "mvTesting",
+          "type" : {
+            "type" : "array",
+            "elementType" : {
+              "type" : "struct",
+              "fields" : [ {
+                "name" : "libTest",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "idVague",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "libCreation",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "isVisiteC",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "isVisiteC5",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "dureeVisite",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "nbPages",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              }, {
+                "name" : "montantC",
+                "type" : "string",
+                "nullable" : true,
+                "metadata" : { }
+              } ]
+            },
+            "containsNull" : true
+          },
+          "nullable" : true,
+          "metadata" : { }
+        } ]
+      },
+      "containsNull" : true
+    },
+    "nullable" : true,
+    "metadata" : { }
+  }, {
+    "name" : "annotations",
+    "type" : {
+      "type" : "array",
+      "elementType" : {
+        "type" : "struct",
+        "fields" : [ {
+          "name" : "path",
+          "type" : "string",
+          "nullable" : true,
+          "metadata" : { }
+        }, {
+          "name" : "typeName",
+          "type" : "string",
+          "nullable" : true,
+          "metadata" : { }
+        }, {
+          "name" : "message",
+          "type" : "string",
+          "nullable" : true,
+          "metadata" : { }
+        }, {
+          "name" : "badData",
+          "type" : "string",
+          "nullable" : true,
+          "metadata" : { }
+        }, {
+          "name" : "remainingData",
+          "type" : {
+            "type" : "array",
+            "elementType" : "string",
+            "containsNull" : true
+          },
+          "nullable" : true,
+          "metadata" : { }
+        }, {
+          "name" : "level",
+          "type" : "string",
+          "nullable" : true,
+          "metadata" : { }
+        }, {
+          "name" : "idFieldName",
+          "type" : "string",
+          "nullable" : true,
+          "metadata" : { }
+        }, {
+          "name" : "idFieldValue",
+          "type" : "string",
+          "nullable" : true,
+          "metadata" : { }
+        }, {
+          "name" : "stage",
+          "type" : "string",
+          "nullable" : true,
+          "metadata" : { }
+        } ]
+      },
+      "containsNull" : true
+    },
+    "nullable" : true,
+    "metadata" : { }
+  } ]
+}

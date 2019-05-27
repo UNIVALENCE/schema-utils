@@ -3,11 +3,19 @@ package io.univalence.schemautils
 import io.univalence.schemautils.Path.{NonEmptyPath, SelectField}
 
 import scala.language.{dynamics, implicitConversions}
+import scala.util.parsing.combinator.RegexParsers
 
 sealed trait Path {
 
-  final def asCode: String = Path.unfold(this).map(_.getOrElse(">")).mkString(".")
+  final def asCode: String = {
 
+    this match {
+      case f:Path.Field => f.parent.asCode + f.allNames.mkString(".")
+      case Path.Empty => ""
+      case Path.Array(n) => n.asCode + "/"
+    }
+
+  }
   def select: SelectField = {
     this match {
       case Path.Empty      => Path.SelectOnEmpty
@@ -27,23 +35,47 @@ sealed trait Path {
 
 object Path {
 
-  def select: SelectField = SelectOnEmpty
-
-  def fromString(str: String): Path = {
-    str
-      .split('.')
-      .toList match {
-      case Nil => Path.Empty
-      case x :: xs =>
-        xs.foldLeft[NonEmptyPath](Path.select.field(x))({
-          case (p, ">") => p.select.>
-          case (p, n)   => p.select.field(n)
-        })
-
+  implicit class PathHelper(val sc: StringContext) extends AnyVal {
+    def path(args: Any*): Path = {
+      val strings = sc.parts.iterator
+      val expressions = args.iterator
+      var buf = new StringBuffer(strings.next)
+      while(strings.hasNext) {
+        buf append expressions.next
+        buf append strings.next
+      }
+      fromString(buf.toString)
     }
   }
 
-  case class Field(name: String, protected[Path] val names: Seq[String], parent: FieldParent) extends NonEmptyPath {
+  def select: SelectField = SelectOnEmpty
+
+
+
+  def fromString(str: String): Path = {
+    str
+      .split('/')
+      .toList match {
+      case Nil => Empty
+      case "" :: Nil=> Empty
+      case "" :: _ => ???
+      case x :: xs =>
+        val root = x.split('.').toList match {
+        case name :: names => Field(name,names,Empty)
+      }
+
+        xs.foldLeft[NonEmptyPath](root)((p,s) => {
+          s match {
+            case "" => Array(p)
+            case _ =>  s.split('.').toList match {
+              case name :: names => Field(name,names,Array(p))
+            }
+          }
+        })
+    }
+  }
+
+  case class Field( name: String, protected[Path] val names: Seq[String], parent: FieldParent) extends NonEmptyPath {
     def allNames: Seq[String] = name +: names
 
     def this(name: String) = { this(name, Nil, Empty) }
