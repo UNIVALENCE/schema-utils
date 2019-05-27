@@ -10,8 +10,8 @@ sealed trait Path {
   final def asCode: String = {
 
     this match {
-      case f:Path.Field => f.parent.asCode + f.allNames.mkString(".")
-      case Path.Empty => ""
+      case f: Path.Field => f.parent.asCode + f.allNames.mkString(".")
+      case Path.Empty    => ""
       case Path.Array(n) => n.asCode + "/"
     }
 
@@ -37,10 +37,10 @@ object Path {
 
   implicit class PathHelper(val sc: StringContext) extends AnyVal {
     def path(args: Any*): Path = {
-      val strings = sc.parts.iterator
+      val strings     = sc.parts.iterator
       val expressions = args.iterator
-      var buf = new StringBuffer(strings.next)
-      while(strings.hasNext) {
+      var buf         = new StringBuffer(strings.next)
+      while (strings.hasNext) {
         buf append expressions.next
         buf append strings.next
       }
@@ -50,32 +50,31 @@ object Path {
 
   def select: SelectField = SelectOnEmpty
 
-
-
   def fromString(str: String): Path = {
     str
       .split('/')
       .toList match {
-      case Nil => Empty
-      case "" :: Nil=> Empty
-      case "" :: _ => ???
+      case Nil       => Empty
+      case "" :: Nil => Empty
+      case "" :: _   => ???
       case x :: xs =>
         val root = x.split('.').toList match {
-        case name :: names => Field(name,names,Empty)
-      }
+          case name :: names => Field(name, names, Empty)
+        }
 
-        xs.foldLeft[NonEmptyPath](root)((p,s) => {
+        xs.foldLeft[NonEmptyPath](root)((p, s) => {
           s match {
             case "" => Array(p)
-            case _ =>  s.split('.').toList match {
-              case name :: names => Field(name,names,Array(p))
-            }
+            case _ =>
+              s.split('.').toList match {
+                case name :: names => Field(name, names, Array(p))
+              }
           }
         })
     }
   }
 
-  case class Field( name: String, protected[Path] val names: Seq[String], parent: FieldParent) extends NonEmptyPath {
+  case class Field(name: String, protected[Path] val names: Seq[String], parent: FieldParent) extends NonEmptyPath {
     def allNames: Seq[String] = name +: names
 
     def this(name: String) = { this(name, Nil, Empty) }

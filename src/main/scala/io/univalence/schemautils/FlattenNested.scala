@@ -15,6 +15,14 @@ object FlattenNested {
                       atomic = atomic  => atomic)(structType)
       .asInstanceOf[StructType]
 
+  /**
+    *
+    * remove ArrayType from a dataframe, generate more lines accordingly
+    * ```
+    *
+    * ```
+    * @param dataFrame
+    */
   def apply(dataFrame: DataFrame): DataFrame = {
     val genSym: () => String = {
       var symN = 0
@@ -28,9 +36,9 @@ object FlattenNested {
     sealed trait Field {
       def sym: String
     }
-    case class Atomic(sym: String)                               extends Field
-    case class Array(sym: String, element: Field)                extends Field
-    case class Struct(sym: String, fields: Seq[(String, Field)]) extends Field
+    final case class Atomic(sym: String)                               extends Field
+    final case class Array(sym: String, element: Field)                extends Field
+    final case class Struct(sym: String, fields: Seq[(String, Field)]) extends Field
 
     def field(dataType: DataType): Field =
       fold[Field](

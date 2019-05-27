@@ -7,16 +7,26 @@ import org.apache.spark.sql.types.{ArrayType, DataType, StructType}
 sealed trait StrExp {
   def exp: String
 }
-case class SingleExp(exp: String) extends StrExp
+final case class SingleExp(exp: String) extends StrExp
 
-case class StructExp(fieldExps: Seq[(StrExp, String)]) extends StrExp {
+final case class StructExp(fieldExps: Seq[(StrExp, String)]) extends StrExp {
   override def exp: String = fieldExps.map(x => x._1.exp + " as " + x._2).mkString("struct(", ", ", ")")
   def asProjection: String = fieldExps.map(x => x._1.exp + " as " + x._2).mkString(", ")
 }
 
 object AlignDataframe {
 
+  /**
+    * project df to the provided schema
+    * ```
+    * apply(dfFromJson("{a:[{b:1, c:2}], d: 3}"), struct("a" -> array(struct("b", int))))
+    * => dfFromJson("{a:[{b:1}]}")
+    * ```
+    * @param df
+    * @param schema
+    */
   def apply(df: DataFrame, schema: StructType): DataFrame = {
+    @SuppressWarnings(Array("org.wartremover.warts.Recursion"))
     def genSelectStruct(structType: StructType, source: String): StructExp = {
       def genSelectDataType(dataType: DataType, source: String): StrExp =
         dataType match {
@@ -39,6 +49,7 @@ object AlignDataframe {
 
 object AlignDataset {
 
+  @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
   def apply[A](dataset: Dataset[A]): Dataset[A] = {
     implicit val exprEnc: Encoder[A] = {
       val field = classOf[Dataset[A]].getDeclaredField("exprEnc")

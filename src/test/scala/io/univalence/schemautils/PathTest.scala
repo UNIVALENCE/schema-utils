@@ -11,6 +11,7 @@ class PathTest extends FunSuite {
     val a = Path.Array(new schemautils.Path.Field("a"))
 
     assert(Path.select.a.>.path == a)
+    //path"a/"
     assert(Path.fromString("a.>") == a)
 
     assert(Path.fromString("xxx.visites.>.recherches").asCode == "xxx.visites.>.recherches")
@@ -27,6 +28,6 @@ class PathTest extends FunSuite {
   test("more test") {
     import Path._
     assert(path"" == Path.Empty)
-    assert(path"abc/" == Path.Array(Path.Field("abc",Nil,Empty)))
+    assert(path"abc/" == Path.Array(Path.Field("abc", Nil, Empty)))
   }
 }

@@ -12,7 +12,7 @@ trait SparkTest extends Assertions {
       .builder()
       .master("local[2]")
       .config("spark.default.parallelism", 1)
-      .config("spark.ui.enabled",true)
+      .config("spark.ui.enabled", false)
       .getOrCreate()
 
   def smallDs[T: Encoder: ClassTag](t: T*): Dataset[T] = {

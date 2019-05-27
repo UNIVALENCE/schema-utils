@@ -75,8 +75,18 @@ object FlattenNestedTargeted {
     })
   }
 
-  case class Tablename(name: String) extends AnyVal
+  case class Tablename(name: String) {
+    override def toString: String = name
+  }
 
+  /**
+    * exec sql query on a dataframe
+    * {{{
+    * scala> sql(dfFromJson("{a:1, b:2}"))(tbl => s"select a + b as c from $tbl"}
+    * dfFromJson("{c:3}")
+    * }}}
+    *
+    */
   def sql(input: DataFrame)(query: Tablename => String): DataFrame = {
     val ss: SparkSession = input.sparkSession
 
