@@ -41,15 +41,10 @@ object TxModelh {
       outer       = true
   )
 
-
   //To put in filters in recherche
-  val toKeep = Seq("idRegroupementPage","idRequete","enabledFilters", "displayedFilters","enabledSorting")
-
+  val toKeep = Seq("idRegroupementPage", "idRequete", "enabledFilters", "displayedFilters", "enabledSorting")
 
   //TODO : Drop recherches/lrs/numerocompte
-
-
-
 
   val detachLrs2: Endo = in =>
     detach(
@@ -97,7 +92,7 @@ object TxModelh {
         val lrRoot = "lrRoot"
         val struct =
           StructExp(colsToMove.map(name => SingleExp(s"$root.$name") -> name) ++ lrsType.fieldNames.map(name =>
-            SingleExp(s"$lrRoot.$name") -> name))
+            SingleExp(s"$lrRoot.$name")                              -> name))
 
         StructExp(
           toKeepWithOutLRS :+ (SingleExp(s"transform($root.lrs, $lrRoot -> ${struct.exp})") -> "lrs")
@@ -139,12 +134,12 @@ object TxModeleHBigQuery {
   def main(args: Array[String]): Unit = {
     args match {
       case Array(baseDir, startday, endday, outDir) =>
-        val ss          = SparkSession.builder().appName(this.getClass.getName).master("local[8]").getOrCreate()
-        val allNoEvents = allDaysBetween(LocalDate.parse(startday), LocalDate.parse(endday)).mkString("{", ",", "}")
+        val ss = SparkSession.builder().appName(this.getClass.getName).master("local[8]").getOrCreate()
+        //val allNoEvents = allDaysBetween(LocalDate.parse(startday), LocalDate.parse(endday)).mkString("{", ",", "}")
         val loadModeleH = ss.read
           .option("basePath", baseDir)
           .option("mergeSchema", "true")
-          .parquet(s"$baseDir/*/no_event=$allNoEvents/*.parquet")
+          .parquet(s"$baseDir/*/no_event=20190521/*.parquet")
 
         loadModeleH.printSchema()
 
